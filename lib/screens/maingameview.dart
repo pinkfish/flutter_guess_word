@@ -36,10 +36,7 @@ class MainGameView extends StatelessWidget {
                   height: 50.0,
                   child: PlayerName(
                     playerState: state,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline5,
+                    style: Theme.of(context).textTheme.headline5,
                   ),
                 ),
                 SizedBox(
@@ -52,8 +49,8 @@ class MainGameView extends StatelessWidget {
                       child: Text("NEW"),
                       onPressed: () =>
                           BlocProvider.of<SinglePlayerBloc>(context).add(
-                            SinglePlayerStartGame(),
-                          ),
+                        SinglePlayerStartGame(),
+                      ),
                     ),
                     FlatButton(
                       child: Text("JOIN"),
@@ -64,28 +61,20 @@ class MainGameView extends StatelessWidget {
                 Expanded(
                   child: state.games.length == 0
                       ? state.loadedGames
-                      ? Text("Not joined any games",
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .bodyText1)
-                      : Text(Messages
-                      .of(context)
-                      .loading,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .bodyText1)
+                          ? Text("Not joined any games",
+                              style: Theme.of(context).textTheme.bodyText1)
+                          : Text(Messages.of(context).loading,
+                              style: Theme.of(context).textTheme.bodyText1)
                       : AnimatedList(
-                    key: _listKey,
-                    initialItemCount: state.games.length,
-                    itemBuilder: (BuildContext cointext, int index,
-                        Animation<double> animate) =>
-                        GameInfo(
-                          game: state.games[index],
-                          animation: animate,
+                          key: _listKey,
+                          initialItemCount: state.games.length,
+                          itemBuilder: (BuildContext cointext, int index,
+                                  Animation<double> animate) =>
+                              GameInfo(
+                            game: state.games[index],
+                            animation: animate,
+                          ),
                         ),
-                  ),
                 ),
               ],
             ),
@@ -100,35 +89,33 @@ class MainGameView extends StatelessWidget {
 
     uid = await showDialog<String>(
       context: context,
-      builder: (BuildContext context) =>
-          AlertDialog(
-            contentPadding: const EdgeInsets.all(16.0),
-            content: new Row(
-              children: <Widget>[
-                new Expanded(
-                  child: new TextField(
-                    autofocus: true,
-                    onChanged: (String str) => uid,
-                    decoration: new InputDecoration(
-                        labelText: 'Game ID', hintText: 'eg. uid'),
-                  ),
-                )
-              ],
-            ),
-            actions: <Widget>[
-              new FlatButton(
-                  child: const Text('CANCEL'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
-              new FlatButton(
-                  child: const Text('OPEN'),
-                  onPressed: () {
-                    Navigator.popAndPushNamed(
-                        context, "/Game/", arguments: uid);
-                  })
-            ],
-          ),
+      builder: (BuildContext context) => AlertDialog(
+        contentPadding: const EdgeInsets.all(16.0),
+        content: new Row(
+          children: <Widget>[
+            new Expanded(
+              child: new TextField(
+                autofocus: true,
+                onChanged: (String str) => uid,
+                decoration: new InputDecoration(
+                    labelText: 'Game ID', hintText: 'eg. uid'),
+              ),
+            )
+          ],
+        ),
+        actions: <Widget>[
+          new FlatButton(
+              child: const Text('CANCEL'),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          new FlatButton(
+              child: const Text('OPEN'),
+              onPressed: () {
+                Navigator.popAndPushNamed(context, "/Game/", arguments: uid);
+              })
+        ],
+      ),
     );
   }
 }

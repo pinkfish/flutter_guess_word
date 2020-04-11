@@ -32,15 +32,14 @@ class HomeScreen extends StatelessWidget {
             saving: state is AuthenticationValidating,
             child: state is AuthenticationLoggedIn
                 ? BlocProvider(
-              create: (BuildContext context) =>
-                  SinglePlayerBloc(
-                      db: RepositoryProvider.of<GameData>(context),
-                      playerUid: state.user.uid),
-              child: MainGameView(),
-            )
+                    create: (BuildContext context) => SinglePlayerBloc(
+                        db: RepositoryProvider.of<GameData>(context),
+                        playerUid: state.user.uid),
+                    child: MainGameView(),
+                  )
                 : Text(
-              'Not logged in',
-            ),
+                    'Not logged in',
+                  ),
           );
         },
       ),

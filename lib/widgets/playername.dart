@@ -17,9 +17,7 @@ class PlayerName extends StatelessWidget {
 
     if (playerState is SinglePlayerUninitialized ||
         playerState is SinglePlayerDeleted) {
-      widget = Text(Messages
-          .of(context)
-          .unknown, style: style);
+      widget = Text(Messages.of(context).unknown, style: style);
     }
 
     if (playerState is SinglePlayerLoaded) {

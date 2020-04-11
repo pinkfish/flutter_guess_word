@@ -18,13 +18,11 @@ class GameInfo extends StatelessWidget {
       child: Padding(
         child: ListTile(
           leading: const Icon(Icons.games),
-          onTap: () =>
-              Navigator.popAndPushNamed(context, "Game/" + game.uid,
-                  arguments: game.uid),
+          onTap: () => Navigator.popAndPushNamed(context, "Game/" + game.uid,
+              arguments: game.uid),
           title: Text(game.title),
           subtitle: Text(
-            "Last updated ${game.lastUpdated.toDate()}, ${game.players
-                .length} players ",
+            "Last updated ${game.lastUpdated.toDate()}, ${game.players.length} players ",
           ),
         ),
         padding: EdgeInsets.all(5.0),

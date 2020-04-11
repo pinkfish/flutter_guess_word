@@ -70,8 +70,7 @@ class GameData {
   Future<void> createGame(
       {@required Game game, @required String playerUid}) async {
     var doc = Firestore.instance.collection("Game").document();
-    var g = game.rebuild((b) =>
-    b
+    var g = game.rebuild((b) => b
       ..uid = doc.documentID
       ..players[playerUid] = GamePlayer());
     var map = g.toMap();

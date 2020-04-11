@@ -27,8 +27,8 @@ part 'serializers.g.dart';
   Round,
 ])
 final Serializers serializers = (_$serializers.toBuilder()
-  ..addPlugin(StandardJsonPlugin())
-  ..add(TimestampSerializer()))
+      ..addPlugin(StandardJsonPlugin())
+      ..add(TimestampSerializer()))
     .build();
 
 class TimestampSerializer implements PrimitiveSerializer<Timestamp> {

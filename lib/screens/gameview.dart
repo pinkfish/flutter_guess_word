@@ -40,17 +40,14 @@ class GameViewScreen extends StatelessWidget {
                     view = SingleGameView(
                       gameState: state,
                       bloc: BlocProvider.of<SingleGameBloc>(context),
-                      myUid: BlocProvider
-                          .of<AuthenticationBloc>(context)
+                      myUid: BlocProvider.of<AuthenticationBloc>(context)
                           .state
                           .user
                           .uid,
                     );
                   }
                   if (authState is AuthenticationUninitialized) {
-                    view = Text(Messages
-                        .of(context)
-                        .loading);
+                    view = Text(Messages.of(context).loading);
                   }
                   if (authState is AuthenticationLoggedOut) {
                     view = Text("Logged out?");
