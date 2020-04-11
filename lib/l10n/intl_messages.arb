@@ -1,0 +1,151 @@
+{
+  "@@last_modified": "2020-04-10T11:43:40.326887",
+  "Basketball stats": "Basketball stats",
+  "@Basketball stats": {
+    "description": "Title of the app",
+    "type": "text",
+    "placeholders": {}
+  },
+  "Loading...": "Loading...",
+  "@Loading...": {
+    "description": "Message to show while loading data",
+    "type": "text",
+    "placeholders": {}
+  },
+  "About": "About",
+  "@About": {
+    "description": "Menu item to open information about the app",
+    "type": "text",
+    "placeholders": {}
+  },
+  "Settings": "Settings",
+  "@Settings": {
+    "description": "Menu item to open information settings of the app",
+    "type": "text",
+    "placeholders": {}
+  },
+  "Must not be empty": "Must not be empty",
+  "@Must not be empty": {
+    "description": "Hint text to say the name must not be empty",
+    "type": "text",
+    "placeholders": {}
+  },
+  "Error in the form": "Error in the form",
+  "@Error in the form": {
+    "description": "Snackbar that pops up to show that there is an error",
+    "type": "text",
+    "placeholders": {}
+  },
+  "Save Failed": "Save Failed",
+  "@Save Failed": {
+    "description": "Failed to save a photo",
+    "type": "text",
+    "placeholders": {}
+  },
+  "SAVE": "SAVE",
+  "@SAVE": {
+    "description": "Text on a save button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "GAMES": "GAMES",
+  "@GAMES": {
+    "description": "Text on a games button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "EDIT": "EDIT",
+  "@EDIT": {
+    "description": "Text on a edit button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "END": "END",
+  "@END": {
+    "description": "Text on a end button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "START": "START",
+  "@START": {
+    "description": "Text on a button to start the period",
+    "type": "text",
+    "placeholders": {}
+  },
+  "unknown": "unknown",
+  "@unknown": {
+    "description": "Used when the data is unknown",
+    "type": "text",
+    "placeholders": {}
+  },
+  "Players": "Players",
+  "@Players": {
+    "description": "Used when the data is unknown",
+    "type": "text",
+    "placeholders": {}
+  },
+  "Email and/or password incorrect": "Email and/or password incorrect",
+  "@Email and/or password incorrect": {
+    "description": "Passwords or email is not correct, login failed",
+    "type": "text",
+    "placeholders": {}
+  },
+  "Internal Error": "Internal Error",
+  "@Internal Error": {
+    "description": "Something happened inside the login system, not a bad password",
+    "type": "text",
+    "placeholders": {}
+  },
+  "Login Cancelled": "Login Cancelled",
+  "@Login Cancelled": {
+    "description": "Login was cancelled",
+    "type": "text",
+    "placeholders": {}
+  },
+  "Name": "Name",
+  "@Name": {
+    "description": "Name for the edit box to edit the user name",
+    "type": "text",
+    "placeholders": {}
+  },
+  "Lies, Damn Lies and Statistics": "Lies, Damn Lies and Statistics",
+  "@Lies, Damn Lies and Statistics": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Mark Twain": "Mark Twain",
+  "@Mark Twain": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "I've missed more than 9000 shots in my career. I've lost almost 300 games. 26 times, I've been trusted to take the game winning shot and missed. I've failed over and over and over again in my life. And that is why I succeed.": "I've missed more than 9000 shots in my career. I've lost almost 300 games. 26 times, I've been trusted to take the game winning shot and missed. I've failed over and over and over again in my life. And that is why I succeed.",
+  "@I've missed more than 9000 shots in my career. I've lost almost 300 games. 26 times, I've been trusted to take the game winning shot and missed. I've failed over and over and over again in my life. And that is why I succeed.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Michael Jordan": "Michael Jordan",
+  "@Michael Jordan": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "I know I am getting better at golf because I am hitting fewer spectators.": "I know I am getting better at golf because I am hitting fewer spectators.",
+  "@I know I am getting better at golf because I am hitting fewer spectators.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Gerald B Ford": "Gerald B Ford",
+  "@Gerald B Ford": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Don't Panic": "Don't Panic",
+  "@Don't Panic": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Douglas Adams": "Douglas Adams",
+  "@Douglas Adams": {
+    "type": "text",
+    "placeholders": {}
+  }
+}
