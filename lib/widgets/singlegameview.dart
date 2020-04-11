@@ -18,6 +18,8 @@ class SingleGameView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Biggles");
+
     if (gameState is SingleGameUninitialized) {
       return Center(child: Text(Messages.of(context).loading));
     }
@@ -26,6 +28,7 @@ class SingleGameView extends StatelessWidget {
       return Center(child: Text("Game no longer exists"));
     }
 
+    print("Fruitcake");
     // Otherwise show the current state.
     var g = gameState.game;
 
@@ -62,25 +65,40 @@ class SingleGameView extends StatelessWidget {
     }
 
     return Column(
+      mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         Text("No one currently playing"),
-        SingleChildScrollView(
-          child: ListView(
-            children: <Widget>[
-              Text("Animals"),
-            ],
-          ),
+        ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            Container(
+              height: 50,
+              child: Text("Animals"),
+            ),
+          ],
         ),
         ButtonBar(
-          children: <Widget>[
-            FlatButton(
-              child: Text("START"),
-              onPressed: () => _startGame(context, "Animals"),
-            )
-          ],
+          children: _getButtons(context),
         )
       ],
     );
+  }
+
+  List<Widget> _getButtons(BuildContext context) {
+    if (!gameState.game.players.containsKey(myUid)) {
+      return <Widget>[
+        FlatButton(
+          child: Text("JOIN"),
+          onPressed: () => bloc.add(SingleGameJoin(myUid)),
+        )
+      ];
+    }
+    return <Widget>[
+      FlatButton(
+        child: Text("START"),
+        onPressed: () => _startGame(context, "Animals"),
+      )
+    ];
   }
 
   void _skipWord(BuildContext context) {

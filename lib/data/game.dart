@@ -1,11 +1,14 @@
 import 'dart:core';
 import 'dart:math';
 
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'serializers.dart';
 import 'round.dart';
+import 'gameplayer.dart';
 
 part 'game.g.dart';
 
@@ -18,18 +21,18 @@ abstract class Game implements Built<Game, GameBuilder> {
 
   int get numberOfRounds;
 
-  int get players;
+  BuiltMap<String, GamePlayer> get players;
 
   String get title;
 
-  DateTime get started;
+  @nullable
+  Timestamp get started;
 
-  DateTime get lastUpdate;
+  @nullable
+  Timestamp get lastUpdated;
 
   static void _initializeBuilder(GameBuilder b) => b
     ..numberOfRounds = 0
-    ..players = 0
-    ..started = DateTime.now().toUtc()
     ..title = getRandomName();
 
   Game._();

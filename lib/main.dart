@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_word_guesser/screens/gameview.dart';
 import 'package:flutter_word_guesser/screens/home.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_word_guesser/services/gamedata.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           title: 'Flutter Demo',
+          initialRoute: '/',
           localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
             MessagesDelegate(),
             GlobalMaterialLocalizations.delegate,
@@ -44,13 +46,29 @@ class MyApp extends StatelessWidget {
             const Locale('en', 'UK'),
             const Locale('en', 'AU'),
           ],
+          onGenerateRoute: _generateRoute,
           theme: ThemeData(
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          home: HomeScreen(),
         ),
       ),
     );
+  }
+
+  Route<dynamic> _generateRoute(RouteSettings settings) {
+    var bits = settings.name.split("/");
+    bits.removeWhere((element) => element.isEmpty);
+    print("In here");
+    if (bits.length == 0) {
+      return MaterialPageRoute(
+          settings: settings, builder: (context) => HomeScreen());
+    }
+    switch (bits[0]) {
+      case "Game":
+        return MaterialPageRoute(
+            settings: settings,
+            builder: (context) => GameViewScreen(gameUid: bits[1]));
+    }
   }
 }

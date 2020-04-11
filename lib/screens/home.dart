@@ -30,21 +30,16 @@ class HomeScreen extends StatelessWidget {
         builder: (BuildContext context, AuthenticationState state) {
           return SavingOverlay(
             saving: state is AuthenticationValidating,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  state is AuthenticationLoggedIn
-                      ? BlocProvider(
-                          create: (BuildContext context) => SinglePlayerBloc(
-                              db: RepositoryProvider.of<GameData>(context),
-                              playerUid: state.user.uid),
-                          child: MainGameView())
-                      : Text(
-                          'Not logged in',
-                        ),
-                ],
-              ),
+            child: state is AuthenticationLoggedIn
+                ? BlocProvider(
+              create: (BuildContext context) =>
+                  SinglePlayerBloc(
+                      db: RepositoryProvider.of<GameData>(context),
+                      playerUid: state.user.uid),
+              child: MainGameView(),
+            )
+                : Text(
+              'Not logged in',
             ),
           );
         },

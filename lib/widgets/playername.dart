@@ -7,8 +7,9 @@ import '../messages.dart';
 
 class PlayerName extends StatelessWidget {
   final SinglePlayerState playerState;
+  final TextStyle style;
 
-  PlayerName({@required this.playerState});
+  PlayerName({@required this.playerState, this.style});
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +17,13 @@ class PlayerName extends StatelessWidget {
 
     if (playerState is SinglePlayerUninitialized ||
         playerState is SinglePlayerDeleted) {
-      widget = Text(Messages.of(context).unknown);
+      widget = Text(Messages
+          .of(context)
+          .unknown, style: style);
     }
 
     if (playerState is SinglePlayerLoaded) {
-      widget = Text(playerState.player.name);
+      widget = Text(playerState.player.name, style: style);
     }
 
     return AnimatedSwitcher(

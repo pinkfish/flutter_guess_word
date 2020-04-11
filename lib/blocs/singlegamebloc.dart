@@ -144,7 +144,19 @@ class SingleGameStartRound extends SingleGameEvent {
   SingleGameStartRound(this.category);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [category];
+}
+
+///
+/// Deletes this game from the world.
+///
+class SingleGameJoin extends SingleGameEvent {
+  final String playerUid;
+
+  SingleGameJoin(this.playerUid);
+
+  @override
+  List<Object> get props => [playerUid];
 }
 
 class _SingleGameNewGame extends SingleGameEvent {
@@ -274,6 +286,16 @@ class SingleGameBloc extends Bloc<SingleGameEvent, SingleGameState> {
 
         // Update the set, choose a new word from the category.
         await db.updateGame(game: state.game.rebuild((b) => b..round = round));
+        yield SingleGameSaveSuccessful(singleGameState: state);
+      } catch (e) {
+        yield SingleGameSaveFailed(singleGameState: state, error: e);
+      }
+    }
+
+    if (event is SingleGameJoin) {
+      yield SingleGameSaving(singleGameState: state);
+      try {
+        await db.joinGame(game: state.game, playerUid: event.playerUid);
         yield SingleGameSaveSuccessful(singleGameState: state);
       } catch (e) {
         yield SingleGameSaveFailed(singleGameState: state, error: e);

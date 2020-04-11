@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'serializers.dart';
 import 'gameword.dart';
@@ -18,13 +19,13 @@ abstract class Round implements Built<Round, RoundBuilder> {
 
   /// This is set to the server timestamp of the start
   @nullable
-  DateTime get roundStart;
+  Timestamp get roundStart;
 
   BuiltList<GameWord> get words;
 
   @memoized
   DateTime get endTime {
-    return roundStart.add(roundLength);
+    return roundStart.toDate().add(roundLength);
   }
 
   Round._();

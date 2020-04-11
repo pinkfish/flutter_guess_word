@@ -152,6 +152,28 @@ class SinglePlayerLoadGames extends SinglePlayerEvent {
   List<Object> get props => [];
 }
 
+///
+/// Starts a game with this player.
+///
+class SinglePlayerStartGame extends SinglePlayerEvent {
+  SinglePlayerStartGame();
+
+  @override
+  List<Object> get props => [];
+}
+
+///
+/// Starts a game with this player.
+///
+class SinglePlayerJoinGame extends SinglePlayerEvent {
+  final Game game;
+
+  SinglePlayerJoinGame({@required this.game});
+
+  @override
+  List<Object> get props => [game];
+}
+
 class _SinglePlayerNewPlayer extends SinglePlayerEvent {
   final Player newPlayer;
 
@@ -244,6 +266,27 @@ class SinglePlayerBloc extends Bloc<SinglePlayerEvent, SinglePlayerState> {
       try {
         Player player = event.player;
         await db.updatePlayer(player: player);
+        yield SinglePlayerSaveSuccessful(singlePlayerState: state);
+      } catch (e) {
+        yield SinglePlayerSaveFailed(singlePlayerState: state, error: e);
+      }
+    }
+
+    if (event is SinglePlayerStartGame) {
+      yield SinglePlayerSaving(singlePlayerState: state);
+      try {
+        Game g = new Game();
+        await db.createGame(game: g, playerUid: playerUid);
+        yield SinglePlayerSaveSuccessful(singlePlayerState: state);
+      } catch (e) {
+        yield SinglePlayerSaveFailed(singlePlayerState: state, error: e);
+      }
+    }
+
+    if (event is SinglePlayerJoinGame) {
+      yield SinglePlayerSaving(singlePlayerState: state);
+      try {
+        await db.createGame(game: event.game, playerUid: playerUid);
         yield SinglePlayerSaveSuccessful(singlePlayerState: state);
       } catch (e) {
         yield SinglePlayerSaveFailed(singlePlayerState: state, error: e);

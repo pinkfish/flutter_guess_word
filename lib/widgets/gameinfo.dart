@@ -15,12 +15,19 @@ class GameInfo extends StatelessWidget {
     return SizeTransition(
       axis: Axis.vertical,
       sizeFactor: animation,
-      child: ListTile(
-        leading: const Icon(Icons.games),
-        title: Text("${game.players} players"),
-        subtitle: Text(
-          "Last updated ${game.lastUpdate} ",
+      child: Padding(
+        child: ListTile(
+          leading: const Icon(Icons.games),
+          onTap: () =>
+              Navigator.popAndPushNamed(context, "Game/" + game.uid,
+                  arguments: game.uid),
+          title: Text(game.title),
+          subtitle: Text(
+            "Last updated ${game.lastUpdated.toDate()}, ${game.players
+                .length} players ",
+          ),
         ),
+        padding: EdgeInsets.all(5.0),
       ),
     );
   }

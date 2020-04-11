@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_word_guesser/data/game.dart';
-import 'package:flutter_word_guesser/data/gameword.dart';
+import 'package:flutter_word_guesser/data/gameplayer.dart';
 import 'package:flutter_word_guesser/data/player.dart';
 
 class GameData {
@@ -25,7 +25,7 @@ class GameData {
     "Anonymous Marsupial Cat",
     "Anonymous Rosella",
     "Anonymous Quenda",
-    "Anonymous Quocka",
+    "Anonymous Quokka",
     "Anonymous Wallaby",
     "Anonymous Kangaroo",
     "Anonymous Echidna",
@@ -45,8 +45,8 @@ class GameData {
     }
   }
 
-  Future<void> updateGame({Game game}) async {
-    var doc = Firestore.instance.collection("Player").document(game.uid);
+  Future<void> updateGame({@required Game game}) async {
+    var doc = Firestore.instance.collection("Game").document(game.uid);
 
     var map = game.toMap();
     if (game.round != null &&
@@ -55,23 +55,38 @@ class GameData {
       // Set the round start to the serever timestamp.
       map["round.roundStart"] = FieldValue.serverTimestamp();
     }
-    map["lastUpdate"] = FieldValue.serverTimestamp();
+    map["lastUpdated"] = FieldValue.serverTimestamp();
     await doc.updateData(game.toMap());
     return;
   }
 
-  Future<void> deleteGame({String gameUid}) async {
-    var doc = Firestore.instance.collection("Player").document(gameUid);
+  Future<void> deleteGame({@required String gameUid}) async {
+    var doc = Firestore.instance.collection("Game").document(gameUid);
 
     await doc.delete();
     return;
   }
 
-  Future<void> createGame({Game game}) async {
-    var doc = Firestore.instance.collection("Player").document();
-    var g = game.rebuild((b) => b..uid = doc.documentID);
+  Future<void> createGame(
+      {@required Game game, @required String playerUid}) async {
+    var doc = Firestore.instance.collection("Game").document();
+    var g = game.rebuild((b) =>
+    b
+      ..uid = doc.documentID
+      ..players[playerUid] = GamePlayer());
     var map = g.toMap();
     map["started"] = FieldValue.serverTimestamp();
+    map["lastUpdated"] = FieldValue.serverTimestamp();
+    print(map);
+
+    await doc.setData(map);
+  }
+
+  Future<void> joinGame(
+      {@required Game game, @required String playerUid}) async {
+    var doc = Firestore.instance.collection("Game").document(game.uid);
+    var map = <String, dynamic>{"players.${playerUid}": GamePlayer().toMap()};
+    map["lastUpdated"] = FieldValue.serverTimestamp();
 
     await doc.updateData(game.toMap());
   }
@@ -91,7 +106,9 @@ class GameData {
       doc.setData(player.toMap());
     }
     await for (var d in doc.snapshots()) {
-      yield Player.fromMap(d.data);
+      if (d.exists) {
+        yield Player.fromMap(d.data);
+      }
     }
   }
 
@@ -113,5 +130,16 @@ class GameData {
     return;
   }
 
-  Stream<BuiltList<Game>> getGamesForPlayer({String playerUid}) {}
+  Stream<BuiltList<Game>> getGamesForPlayer({String playerUid}) async* {
+    var docs = Firestore.instance
+        .collection("Game")
+        .where("players.${playerUid}.enabled", isEqualTo: true);
+    print("players.${playerUid}.enabled");
+    var first = await docs.getDocuments();
+    yield BuiltList.of(first.documents.map((e) => Game.fromMap(e.data)));
+
+    await for (var next in docs.snapshots()) {
+      yield BuiltList.of(next.documents.map((e) => Game.fromMap(e.data)));
+    }
+  }
 }
