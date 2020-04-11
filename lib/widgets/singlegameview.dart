@@ -1,10 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_word_guesser/blocs/singlegamebloc.dart';
-import 'package:flutter_word_guesser/data/game.dart';
-import 'package:flutter_word_guesser/services/gamedata.dart';
 import 'package:flutter_word_guesser/widgets/countdownwidget.dart';
 
 import '../messages.dart';
