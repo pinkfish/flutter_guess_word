@@ -24,6 +24,7 @@ jobs:
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}   
         channel: 'beta' # or: 'dev' or 'beta'
+    - run: flutter upgrade
     - run: flutter packages get
     - run: flutter pub run build_runner build
     - run: flutter build web
