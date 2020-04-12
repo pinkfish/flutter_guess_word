@@ -74,9 +74,9 @@ class SinglePlayerLoaded extends SinglePlayerState {
 class SinglePlayerSaving extends SinglePlayerState {
   SinglePlayerSaving({@required SinglePlayerState singlePlayerState})
       : super(
-      player: singlePlayerState.player,
-      loadedGames: singlePlayerState.loadedGames,
-      games: singlePlayerState.games);
+            player: singlePlayerState.player,
+            loadedGames: singlePlayerState.loadedGames,
+            games: singlePlayerState.games);
 
   @override
   String toString() {
@@ -90,9 +90,9 @@ class SinglePlayerSaving extends SinglePlayerState {
 class SinglePlayerSaveSuccessful extends SinglePlayerState {
   SinglePlayerSaveSuccessful({@required SinglePlayerState singlePlayerState})
       : super(
-      player: singlePlayerState.player,
-      loadedGames: singlePlayerState.loadedGames,
-      games: singlePlayerState.games);
+            player: singlePlayerState.player,
+            loadedGames: singlePlayerState.loadedGames,
+            games: singlePlayerState.games);
 
   @override
   String toString() {
@@ -109,9 +109,9 @@ class SinglePlayerSaveFailed extends SinglePlayerState {
   SinglePlayerSaveFailed(
       {@required SinglePlayerState singlePlayerState, this.error})
       : super(
-      player: singlePlayerState.player,
-      loadedGames: singlePlayerState.loadedGames,
-      games: singlePlayerState.games);
+            player: singlePlayerState.player,
+            loadedGames: singlePlayerState.loadedGames,
+            games: singlePlayerState.games);
 
   @override
   String toString() {

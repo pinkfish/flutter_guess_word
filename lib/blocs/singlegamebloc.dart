@@ -117,10 +117,10 @@ class SingleGameSaveFailed extends SingleGameState {
 
   SingleGameSaveFailed({@required SingleGameState singleGameState, this.error})
       : super(
-    game: singleGameState.game,
-    loadedCategory: singleGameState.loadedCategory,
-    words: singleGameState.words,
-  );
+          game: singleGameState.game,
+          loadedCategory: singleGameState.loadedCategory,
+          words: singleGameState.words,
+        );
 
   @override
   String toString() {
@@ -134,10 +134,10 @@ class SingleGameSaveFailed extends SingleGameState {
 class SingleGameDeleted extends SingleGameState {
   SingleGameDeleted()
       : super(
-    game: null,
-    loadedCategory: false,
-    words: BuiltList.of([]),
-  );
+          game: null,
+          loadedCategory: false,
+          words: BuiltList.of([]),
+        );
 
   @override
   String toString() {
@@ -151,10 +151,10 @@ class SingleGameDeleted extends SingleGameState {
 class SingleGameUninitialized extends SingleGameState {
   SingleGameUninitialized()
       : super(
-    game: null,
-    loadedCategory: false,
-    words: BuiltList.of([]),
-  );
+          game: null,
+          loadedCategory: false,
+          words: BuiltList.of([]),
+        );
 }
 
 abstract class SingleGameEvent extends Equatable {}
@@ -361,14 +361,14 @@ class SingleGameBloc extends Bloc<SingleGameEvent, SingleGameState> {
         } else {
           var words = await db
               .getWordsForCategory(
-              categoryUid: state.game.round.currentCategory.uid)
+                  categoryUid: state.game.round.currentCategory.uid)
               .first;
           word = words[_randomNum.nextInt(state.words.length)];
         }
 
         bAllWords.add(
           GameWord(
-                (b) => b..word = word,
+            (b) => b..word = word,
           ),
         );
         // Update the set, choose a new word from the category.
@@ -396,7 +396,7 @@ class SingleGameBloc extends Bloc<SingleGameEvent, SingleGameState> {
         } else {
           var words = await db
               .getWordsForCategory(
-              categoryUid: state.game.round.currentCategory.uid)
+                  categoryUid: state.game.round.currentCategory.uid)
               .first;
           word = words[_randomNum.nextInt(state.words.length)];
         }
