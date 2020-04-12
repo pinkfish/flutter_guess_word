@@ -65,37 +65,37 @@ class GameViewScreen extends StatelessWidget {
                     ? Text(Messages.of(context).unknown)
                     : Text(state.game.title),
               ),
-                  body: BlocBuilder(
-                    bloc: BlocProvider.of<AuthenticationBloc>(context),
-                    builder: (BuildContext context, AuthenticationState authState) {
-                      Widget view;
-                      if (authState is AuthenticationLoggedIn) {
-                        view = SingleGameView(
-                          gameState: state,
-                          bloc: BlocProvider.of<SingleGameBloc>(context),
-                          myUid: BlocProvider.of<AuthenticationBloc>(context)
-                              .state
-                              .user
-                              .uid,
-                        );
-                      }
-                      if (authState is AuthenticationUninitialized) {
-                        view = Text(Messages.of(context).loading);
-                      }
-                      if (authState is AuthenticationLoggedOut) {
-                        view = Text("Logged out?");
-                      }
+              body: BlocBuilder(
+                bloc: BlocProvider.of<AuthenticationBloc>(context),
+                builder: (BuildContext context, AuthenticationState authState) {
+                  Widget view;
+                  if (authState is AuthenticationLoggedIn) {
+                    view = SingleGameView(
+                      gameState: state,
+                      bloc: BlocProvider.of<SingleGameBloc>(context),
+                      myUid: BlocProvider.of<AuthenticationBloc>(context)
+                          .state
+                          .user
+                          .uid,
+                    );
+                  }
+                  if (authState is AuthenticationUninitialized) {
+                    view = Text(Messages.of(context).loading);
+                  }
+                  if (authState is AuthenticationLoggedOut) {
+                    view = Text("Logged out?");
+                  }
 
-                      return SavingOverlay(
-                        saving: state is SingleGameSaving ||
-                            !(authState is AuthenticationLoggedIn),
-                        child: view,
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
+                  return SavingOverlay(
+                    saving: state is SingleGameSaving ||
+                        !(authState is AuthenticationLoggedIn),
+                    child: view,
+                  );
+                },
+              ),
+            );
+          },
+        ),
       ),
     );
   }

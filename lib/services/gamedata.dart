@@ -69,7 +69,8 @@ class GameData {
     return;
   }
 
-  Future<void> createGame({@required Game game, @required String playerUid}) async {
+  Future<void> createGame(
+      {@required Game game, @required String playerUid}) async {
     var doc = Firestore.instance.collection("Game").document();
     var g = game.rebuild((b) => b
       ..uid = doc.documentID
@@ -82,7 +83,8 @@ class GameData {
     await doc.setData(map);
   }
 
-  Future<void> joinGame({@required Game game, @required String playerUid}) async {
+  Future<void> joinGame(
+      {@required Game game, @required String playerUid}) async {
     var doc = Firestore.instance.collection("Game").document(game.uid);
     var map = <String, dynamic>{"players.$playerUid": GamePlayer().toMap()};
     map["lastUpdated"] = FieldValue.serverTimestamp();

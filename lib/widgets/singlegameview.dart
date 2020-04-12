@@ -62,15 +62,9 @@ class SingleGameView extends StatelessWidget {
             Text("Word to guess"),
             CountdownWidget(
                 endTime: g.round.endTime,
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headline2),
+                style: Theme.of(context).textTheme.headline2),
             Text(g.round.words.last.word,
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headline4),
+                style: Theme.of(context).textTheme.headline4),
           ],
         );
       }
