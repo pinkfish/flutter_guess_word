@@ -32,6 +32,7 @@ import 'package:flutter_word_guesser/data/game.dart';
 import 'package:flutter_word_guesser/data/gamecategory.dart';
 import 'package:flutter_word_guesser/data/gameplayer.dart';
 import 'package:flutter_word_guesser/data/player.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class GameData {
   static final Random _randomNum = Random.secure();
@@ -73,14 +74,12 @@ class GameData {
     var doc = Firestore.instance.collection("Game").document(game.uid);
 
     var map = game.toMap();
-    if (game.round != null &&
-        game.round.roundStart == null &&
-        !game.round.completed) {
+    if (game.round != null && game.round.roundStart == null) {
       // Set the round start to the serever timestamp.
       map["round.roundStart"] = FieldValue.serverTimestamp();
     }
     map["lastUpdated"] = FieldValue.serverTimestamp();
-    await doc.updateData(game.toMap());
+    await doc.updateData(map);
     return;
   }
 
@@ -195,23 +194,31 @@ class GameData {
         .collection("Category")
         .document(categoryUid)
         .collection("Words");
+    print(categoryUid);
     var first = await docs.getDocuments();
-    yield BuiltList.of(first.documents.map((e) => e.data as String));
+    yield BuiltList.of(first.documents.map((e) {
+      print("Big fish ${e.documentID}");
+      return e.documentID;
+    }));
 
     await for (var next in docs.snapshots()) {
-      yield BuiltList.of(next.documents.map((e) => e.data as String));
+      yield BuiltList.of(next.documents.map((e) => e.documentID));
     }
   }
 
   Stream<BuiltList<GameCategory>> getAllCategories() async* {
     var docs = Firestore.instance.collection("Category");
     var first = await docs.getDocuments();
-    yield BuiltList.of(
-        first.documents.map((e) => GameCategory.fromMap(e.data)));
+    yield BuiltList.of(first.documents.map((e) {
+      e.data["uid"] = e.documentID;
+      return GameCategory.fromMap(e.data);
+    }));
 
     await for (var next in docs.snapshots()) {
-      yield BuiltList.of(
-          next.documents.map((e) => GameCategory.fromMap(e.data)));
+      yield BuiltList.of(next.documents.map((e) {
+        e.data["uid"] = e.documentID;
+        return GameCategory.fromMap(e.data);
+      }));
     }
   }
 }

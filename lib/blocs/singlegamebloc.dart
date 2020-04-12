@@ -383,6 +383,7 @@ class SingleGameBloc extends Bloc<SingleGameEvent, SingleGameState> {
     if (event is SingleGameStartRound) {
       yield SingleGameSaving(singleGameState: state);
       try {
+        print("Starting round");
         var round = RoundBuilder();
         // User has to exist to be in here.
         round.currentPlayerUid =
@@ -394,18 +395,21 @@ class SingleGameBloc extends Bloc<SingleGameEvent, SingleGameState> {
         if (lastCategoryUid == event.category.uid && state.loadedCategory) {
           word = state.words[_randomNum.nextInt(state.words.length)];
         } else {
+          print(event.category);
           var words = await db
-              .getWordsForCategory(
-                  categoryUid: state.game.round.currentCategory.uid)
+              .getWordsForCategory(categoryUid: event.category.uid)
               .first;
-          word = words[_randomNum.nextInt(state.words.length)];
+          print(words);
+          word = words[_randomNum.nextInt(words.length)];
         }
         round.words.add(GameWord((b) => b..word = word));
 
         // Update the set, choose a new word from the category.
+        print("Update $round");
         await db.updateGame(game: state.game.rebuild((b) => b..round = round));
         yield SingleGameSaveSuccessful(singleGameState: state);
       } catch (e) {
+        print(e);
         yield SingleGameSaveFailed(singleGameState: state, error: e);
       }
     }

@@ -25,6 +25,9 @@ import 'package:flutter_word_guesser/blocs/singleplayerbloc.dart';
 
 import '../messages.dart';
 
+///
+/// Rendering the name of the player based on the current player state.
+///
 class PlayerName extends StatelessWidget {
   final SinglePlayerState playerState;
   final TextStyle style;

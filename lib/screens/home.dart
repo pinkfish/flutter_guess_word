@@ -25,6 +25,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_word_guesser/blocs/authenticationbloc.dart';
 import 'package:flutter_word_guesser/blocs/singleplayerbloc.dart';
 import 'package:flutter_word_guesser/services/gamedata.dart';
+import 'package:flutter_word_guesser/widgets/guesserdrawer.dart';
 import 'package:flutter_word_guesser/widgets/savingoverlay.dart';
 
 import '../services/gamedata.dart';
@@ -37,6 +38,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("Word Guesser"),
       ),
+      drawer: GuesserDrawer(),
       body: BlocConsumer(
         bloc: BlocProvider.of<AuthenticationBloc>(context),
         listener: (BuildContext context, AuthenticationState state) {

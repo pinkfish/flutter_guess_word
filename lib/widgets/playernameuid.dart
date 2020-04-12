@@ -20,34 +20,32 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_word_guesser/blocs/singleplayerbloc.dart';
+import 'package:flutter_word_guesser/services/gamedata.dart';
 
-import 'serializers.dart';
+import '../messages.dart';
+import 'playername.dart';
 
-part 'gameword.g.dart';
+class PlayerNameUid extends StatelessWidget {
+  final String playerUid;
+  final TextStyle style;
 
-///
-/// The GameWord for the Game.  It tracks the word state and if it is
-/// successful or not.
-///
-abstract class GameWord implements Built<GameWord, GameWordBuilder> {
-  String get word;
+  PlayerNameUid({@required this.playerUid, this.style});
 
-  @nullable
-  bool get successful;
-
-  GameWord._();
-
-  factory GameWord([updates(GameWordBuilder b)]) = _$GameWord;
-
-  Map<String, dynamic> toMap() {
-    return serializers.serializeWith(GameWord.serializer, this);
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (BuildContext context) => SinglePlayerBloc(
+          playerUid: playerUid, db: RepositoryProvider.of<GameData>(context)),
+      child: Builder(
+        builder: (BuildContext context) => BlocBuilder(
+          bloc: BlocProvider.of<SinglePlayerBloc>(context),
+          builder: (BuildContext context, SinglePlayerState state) =>
+              PlayerName(playerState: state, style: style),
+        ),
+      ),
+    );
   }
-
-  static GameWord fromMap(Map<String, dynamic> jsonData) {
-    return serializers.deserializeWith(GameWord.serializer, jsonData);
-  }
-
-  static Serializer<GameWord> get serializer => _$gameWordSerializer;
 }

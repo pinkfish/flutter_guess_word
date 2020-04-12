@@ -26,6 +26,7 @@ import 'package:flutter_word_guesser/blocs/authenticationbloc.dart';
 import 'package:flutter_word_guesser/blocs/categorybloc.dart';
 import 'package:flutter_word_guesser/blocs/singlegamebloc.dart';
 import 'package:flutter_word_guesser/services/gamedata.dart';
+import 'package:flutter_word_guesser/widgets/guesserdrawer.dart';
 import 'package:flutter_word_guesser/widgets/savingoverlay.dart';
 import 'package:flutter_word_guesser/widgets/singlegameview.dart';
 
@@ -63,33 +64,48 @@ class GameViewScreen extends StatelessWidget {
                     ? Text(Messages.of(context).unknown)
                     : Text(state.game.title),
               ),
-              body: BlocBuilder(
-                bloc: BlocProvider.of<AuthenticationBloc>(context),
-                builder: (BuildContext context, AuthenticationState authState) {
-                  Widget view;
-                  if (authState is AuthenticationLoggedIn) {
-                    view = SingleGameView(
-                      gameState: state,
-                      bloc: BlocProvider.of<SingleGameBloc>(context),
-                      myUid: BlocProvider.of<AuthenticationBloc>(context)
-                          .state
-                          .user
-                          .uid,
-                    );
+              drawer: GuesserDrawer(),
+              body: BlocListener(
+                bloc: BlocProvider.of<SingleGameBloc>(context),
+                listener: (BuildContext context, SingleGameState state) {
+                  if (state is SingleGameSaveFailed) {
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text("Error saving"),
+                    ));
                   }
-                  if (authState is AuthenticationUninitialized) {
-                    view = Text(Messages.of(context).loading);
-                  }
-                  if (authState is AuthenticationLoggedOut) {
-                    view = Text("Logged out?");
-                  }
-
-                  return SavingOverlay(
-                    saving: state is SingleGameSaving ||
-                        !(authState is AuthenticationLoggedIn),
-                    child: view,
-                  );
                 },
+                child: BlocBuilder(
+                  bloc: BlocProvider.of<AuthenticationBloc>(context),
+                  builder:
+                      (BuildContext context, AuthenticationState authState) {
+                    Widget view;
+                    if (authState is AuthenticationLoggedIn) {
+                      view = SingleGameView(
+                        gameState: state,
+                        bloc: BlocProvider.of<SingleGameBloc>(context),
+                        myUid: BlocProvider.of<AuthenticationBloc>(context)
+                            .state
+                            .user
+                            .uid,
+                      );
+                    }
+                    if (authState is AuthenticationUninitialized) {
+                      view = Text(Messages.of(context).loading);
+                    }
+                    if (authState is AuthenticationLoggedOut) {
+                      view = Text("Logged out?");
+                    }
+                    if (view == null) {
+                      view = Text(Messages.of(context).loading);
+                    }
+
+                    return SavingOverlay(
+                      saving: state is SingleGameSaving ||
+                          !(authState is AuthenticationLoggedIn),
+                      child: view,
+                    );
+                  },
+                ),
               ),
             );
           },
