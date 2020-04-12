@@ -5,7 +5,8 @@ on:
     branches: [master]
     paths: 
       - lib/**
-      -  .github/workflows/flutter.yml
+      - firebase/**
+      - .github/workflows/firebase.yml
 
 
 jobs:
