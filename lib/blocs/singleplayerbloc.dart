@@ -39,9 +39,10 @@ abstract class SinglePlayerState extends Equatable {
   final bool loadedGames;
   final BuiltList<Game> games;
 
-  SinglePlayerState({@required this.player,
-    @required this.games,
-    @required this.loadedGames});
+  SinglePlayerState(
+      {@required this.player,
+      @required this.games,
+      @required this.loadedGames});
 
   @override
   List<Object> get props => [player, loadedGames, games];
@@ -104,7 +105,8 @@ class SinglePlayerSaveSuccessful extends SinglePlayerState {
 class SinglePlayerSaveFailed extends SinglePlayerState {
   final Error error;
 
-  SinglePlayerSaveFailed({@required SinglePlayerState singlePlayerState, this.error})
+  SinglePlayerSaveFailed(
+      {@required SinglePlayerState singlePlayerState, this.error})
       : super(
       player: singlePlayerState.player,
       loadedGames: singlePlayerState.loadedGames,

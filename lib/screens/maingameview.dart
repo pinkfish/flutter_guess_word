@@ -71,8 +71,8 @@ class MainGameView extends StatelessWidget {
                       child: Text("NEW"),
                       onPressed: () =>
                           BlocProvider.of<SinglePlayerBloc>(context).add(
-                            SinglePlayerStartGame(),
-                          ),
+                        SinglePlayerStartGame(),
+                      ),
                     ),
                     FlatButton(
                       child: Text("JOIN"),
@@ -84,9 +84,17 @@ class MainGameView extends StatelessWidget {
                   child: state.games.length == 0
                       ? state.loadedGames
                       ? Text("Not joined any games",
-                      style: Theme.of(context).textTheme.bodyText1)
-                      : Text(Messages.of(context).loading,
-                      style: Theme.of(context).textTheme.bodyText1)
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyText1)
+                      : Text(Messages
+                      .of(context)
+                      .loading,
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyText1)
                       : AnimatedList(
                     key: _listKey,
                     initialItemCount: state.games.length,

@@ -64,10 +64,10 @@ class SingleGameLoaded extends SingleGameState {
     bool loadedCategory,
     BuiltList<String> words,
   }) : super(
-    game: game ?? state.game,
-    loadedCategory: loadedCategory ?? state.loadedCategory,
-    words: words ?? state.words,
-  );
+          game: game ?? state.game,
+          loadedCategory: loadedCategory ?? state.loadedCategory,
+          words: words ?? state.words,
+        );
 
   @override
   String toString() {

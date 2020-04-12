@@ -117,8 +117,7 @@ class SingleGameView extends StatelessWidget {
                   shrinkWrap: true,
                   children: categoryState.categories
                       .map(
-                        (e) =>
-                        Padding(
+                        (e) => Padding(
                           padding: EdgeInsets.only(
                               left: 10, right: 10, top: 5, bottom: 5),
                           child: CategoryItem(

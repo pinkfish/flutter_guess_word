@@ -164,7 +164,8 @@ class AuthenticationEventAsGoogleUser extends AuthenticationEvent {
 ///
 /// This bloc deals with all the pieces related to authentication.
 ///
-class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
+class AuthenticationBloc
+    extends Bloc<AuthenticationEvent, AuthenticationState> {
   final FirebaseAnalytics analyticsSubsystem;
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
@@ -209,7 +210,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   // http://localhost:60548/#/Game/n0yoFC9Vgt6taqYvG37j
 
   @override
-  Stream<AuthenticationState> mapEventToState(AuthenticationEvent event) async* {
+  Stream<AuthenticationState> mapEventToState(
+      AuthenticationEvent event) async* {
     if (event is _AuthenticationLogIn) {
       _AuthenticationLogIn loggedInEvent = event;
       var state = _updateWithUser(loggedInEvent.user);
@@ -250,20 +252,20 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
         final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
         if (googleUser != null) {
           final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+              await googleUser.authentication;
           final AuthCredential credential = GoogleAuthProvider.getCredential(
             accessToken: googleAuth.accessToken,
             idToken: googleAuth.idToken,
           );
           AuthResult result =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+              await FirebaseAuth.instance.signInWithCredential(credential);
           var user = result.user;
           assert(!user.isAnonymous);
           if (user != null) {
             assert(await user.getIdToken() != null);
 
             final FirebaseUser currentUser =
-            await FirebaseAuth.instance.currentUser();
+                await FirebaseAuth.instance.currentUser();
             assert(user.uid == currentUser.uid);
             print("Logged in as $user");
             analyticsSubsystem.logLogin();

@@ -31,7 +31,7 @@ import 'l10n/messages_all.dart';
 class Messages {
   static Future<Messages> load(Locale locale) async {
     final String name =
-    locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
+        locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
     final String localeName = Intl.canonicalizedLocale(name);
 
     return initializeMessages(localeName).then((_) {

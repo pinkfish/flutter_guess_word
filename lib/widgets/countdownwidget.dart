@@ -51,13 +51,13 @@ class _CountdownWidgetState extends State<CountdownWidget> {
 
     _timer = Timer.periodic(
         Duration(seconds: 1),
-            (Timer t) => setState(() {
-          _duration = widget.endTime.difference(DateTime.now());
-          if (_duration.isNegative) {
-            _duration = Duration(milliseconds: 0);
-            _timer.cancel();
-          }
-        }));
+        (Timer t) => setState(() {
+              _duration = widget.endTime.difference(DateTime.now());
+              if (_duration.isNegative) {
+                _duration = Duration(milliseconds: 0);
+                _timer.cancel();
+              }
+            }));
   }
 
   @override
