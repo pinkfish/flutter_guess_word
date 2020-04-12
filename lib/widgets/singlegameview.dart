@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_word_guesser/blocs/categorybloc.dart';
 import 'package:flutter_word_guesser/blocs/singlegamebloc.dart';
 import 'package:flutter_word_guesser/widgets/countdownwidget.dart';
 
 import '../messages.dart';
+import 'categoryitem.dart';
 
 class SingleGameView extends StatelessWidget {
   final SingleGameState gameState;
@@ -13,8 +16,6 @@ class SingleGameView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Biggles");
-
     if (gameState is SingleGameUninitialized) {
       return Center(child: Text(Messages.of(context).loading));
     }
@@ -23,16 +24,20 @@ class SingleGameView extends StatelessWidget {
       return Center(child: Text("Game no longer exists"));
     }
 
-    print("Fruitcake");
     // Otherwise show the current state.
     var g = gameState.game;
 
     if (g.round != null && !g.round.completed) {
       if (g.round.currentPlayerUid == myUid) {
+        if (!gameState.loadedCategory) {
+          bloc.add(SingleGameLoadCategory());
+        }
         // Show a button bar with the skip/yes on it.
         return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text("Guessing word"),
+            Text("Guessing word", style: Theme.of(context).textTheme.headline5),
             ButtonBar(
               children: <Widget>[
                 FlatButton(
@@ -44,7 +49,10 @@ class SingleGameView extends StatelessWidget {
                   onPressed: () => _yesWord(context),
                 )
               ],
-            )
+            ),
+            CountdownWidget(
+                endTime: g.round.endTime,
+                style: Theme.of(context).textTheme.headline2),
           ],
         );
       } else {
@@ -52,8 +60,17 @@ class SingleGameView extends StatelessWidget {
         return Column(
           children: <Widget>[
             Text("Word to guess"),
-            CountdownWidget(endTime: g.round.endTime),
-            Text(g.round.words.last.word),
+            CountdownWidget(
+                endTime: g.round.endTime,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline2),
+            Text(g.round.words.last.word,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline4),
           ],
         );
       }
@@ -61,20 +78,49 @@ class SingleGameView extends StatelessWidget {
 
     return Column(
       mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("No one currently playing"),
-        ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            Container(
-              height: 50,
-              child: Text("Animals"),
-            ),
-          ],
-        ),
+        Text("No one currently playing",
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline5),
         ButtonBar(
           children: _getButtons(context),
-        )
+        ),
+        Divider(),
+        Text("Pick a Category", style: Theme
+            .of(context)
+            .textTheme
+            .headline6),
+        SizedBox(
+          height: 10,
+        ),
+        Expanded(
+          child: BlocBuilder(
+              bloc: BlocProvider.of<CategoryBloc>(context),
+              builder: (BuildContext contect, CategoryState categoryState) {
+                if (categoryState is CategoryUninitialized) {
+                  return CircularProgressIndicator();
+                }
+                return ListView(
+                  shrinkWrap: true,
+                  children: categoryState.categories
+                      .map(
+                        (e) =>
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: 10, right: 10, top: 5, bottom: 5),
+                          child: CategoryItem(
+                            category: e,
+                            onTap: () => bloc.add(SingleGameStartRound(e)),
+                          ),
+                        ),
+                  )
+                      .toList(),
+                );
+              }),
+        ),
       ],
     );
   }
@@ -88,12 +134,7 @@ class SingleGameView extends StatelessWidget {
         )
       ];
     }
-    return <Widget>[
-      FlatButton(
-        child: Text("START"),
-        onPressed: () => _startGame(context, "Animals"),
-      )
-    ];
+    return <Widget>[];
   }
 
   void _skipWord(BuildContext context) {
@@ -102,9 +143,5 @@ class SingleGameView extends StatelessWidget {
 
   void _yesWord(BuildContext context) {
     bloc.add(SingleGameUpdateWord(true));
-  }
-
-  void _startGame(BuildContext context, String category) {
-    bloc.add(SingleGameStartRound(category));
   }
 }

@@ -4,13 +4,14 @@
 
 library serializers;
 
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
-import 'package:built_collection/built_collection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_word_guesser/data/gameplayer.dart';
 
 import 'game.dart';
+import 'gamecategory.dart';
 import 'gameplayer.dart';
 import 'gameword.dart';
 import 'player.dart';
@@ -21,6 +22,7 @@ part 'serializers.g.dart';
 /// Collection of generated serializers for the built_value chat example.
 @SerializersFor([
   Game,
+  GameCategory,
   GamePlayer,
   GameWord,
   Player,

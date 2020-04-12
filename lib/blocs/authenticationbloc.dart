@@ -185,6 +185,8 @@ class AuthenticationBloc
     return AuthenticationLoggedIn(user: user);
   }
 
+  // http://localhost:60548/#/Game/n0yoFC9Vgt6taqYvG37j
+
   @override
   Stream<AuthenticationState> mapEventToState(
       AuthenticationEvent event) async* {

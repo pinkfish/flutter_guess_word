@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_word_guesser/blocs/singleplayerbloc.dart';
-import 'package:flutter_word_guesser/services/gamedata.dart';
 
 import '../messages.dart';
 

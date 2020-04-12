@@ -2,13 +2,13 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_word_guesser/blocs/authenticationbloc.dart';
 import 'package:flutter_word_guesser/screens/gameview.dart';
 import 'package:flutter_word_guesser/screens/home.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_word_guesser/services/gamedata.dart';
 
 import 'messages.dart';
-import 'package:flutter_word_guesser/blocs/authenticationbloc.dart';
 
 FirebaseAnalytics analytics = FirebaseAnalytics();
 
@@ -64,11 +64,15 @@ class MyApp extends StatelessWidget {
       return MaterialPageRoute(
           settings: settings, builder: (context) => HomeScreen());
     }
+    print("Fluff $bits");
     switch (bits[0]) {
       case "Game":
-        return MaterialPageRoute(
-            settings: settings,
-            builder: (context) => GameViewScreen(gameUid: bits[1]));
+        if (bits.length > 1) {
+          return MaterialPageRoute(
+              settings: settings,
+              builder: (context) => GameViewScreen(gameUid: bits[1]));
+        }
     }
+    return null;
   }
 }

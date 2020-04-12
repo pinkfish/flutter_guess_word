@@ -33,8 +33,15 @@ class _CountdownWidgetState extends State<CountdownWidget> {
               _duration = widget.endTime.difference(DateTime.now());
               if (_duration.isNegative) {
                 _duration = Duration(milliseconds: 0);
+                _timer.cancel();
               }
             }));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
   }
 
   @override

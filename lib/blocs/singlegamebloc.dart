@@ -1,22 +1,32 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_word_guesser/data/game.dart';
+import 'package:flutter_word_guesser/data/gamecategory.dart';
 import 'package:flutter_word_guesser/data/gameword.dart';
 import 'package:flutter_word_guesser/data/round.dart';
 import 'package:flutter_word_guesser/services/gamedata.dart';
 import 'package:meta/meta.dart';
+import 'package:synchronized/synchronized.dart';
 
 ///
 /// The data associated with the game.
 ///
 abstract class SingleGameState extends Equatable {
   final Game game;
+  final bool loadedCategory;
+  final BuiltList<String> words;
 
-  SingleGameState({@required this.game});
+  SingleGameState({
+    @required this.game,
+    @required this.loadedCategory,
+    @required this.words,
+  });
 
   @override
   List<Object> get props => [game];
@@ -26,12 +36,16 @@ abstract class SingleGameState extends Equatable {
 /// We have a game, default state.
 ///
 class SingleGameLoaded extends SingleGameState {
-  SingleGameLoaded(
-      {@required Game game,
-      SingleGameState state,
-      bool loadedGamed,
-      BuiltList<Game> games})
-      : super(game: game ?? state.game);
+  SingleGameLoaded({
+    @required Game game,
+    SingleGameState state,
+    bool loadedCategory,
+    BuiltList<String> words,
+  }) : super(
+          game: game ?? state.game,
+          loadedCategory: loadedCategory ?? state.loadedCategory,
+          words: words ?? state.words,
+        );
 
   @override
   String toString() {
@@ -44,7 +58,11 @@ class SingleGameLoaded extends SingleGameState {
 ///
 class SingleGameSaving extends SingleGameState {
   SingleGameSaving({@required SingleGameState singleGameState})
-      : super(game: singleGameState.game);
+      : super(
+    game: singleGameState.game,
+    loadedCategory: singleGameState.loadedCategory,
+    words: singleGameState.words,
+  );
 
   @override
   String toString() {
@@ -57,7 +75,11 @@ class SingleGameSaving extends SingleGameState {
 ///
 class SingleGameSaveSuccessful extends SingleGameState {
   SingleGameSaveSuccessful({@required SingleGameState singleGameState})
-      : super(game: singleGameState.game);
+      : super(
+    game: singleGameState.game,
+    loadedCategory: singleGameState.loadedCategory,
+    words: singleGameState.words,
+  );
 
   @override
   String toString() {
@@ -72,7 +94,11 @@ class SingleGameSaveFailed extends SingleGameState {
   final Error error;
 
   SingleGameSaveFailed({@required SingleGameState singleGameState, this.error})
-      : super(game: singleGameState.game);
+      : super(
+    game: singleGameState.game,
+    loadedCategory: singleGameState.loadedCategory,
+    words: singleGameState.words,
+  );
 
   @override
   String toString() {
@@ -84,7 +110,12 @@ class SingleGameSaveFailed extends SingleGameState {
 /// Game got deleted.
 ///
 class SingleGameDeleted extends SingleGameState {
-  SingleGameDeleted() : super(game: null);
+  SingleGameDeleted()
+      : super(
+    game: null,
+    loadedCategory: false,
+    words: BuiltList.of([]),
+  );
 
   @override
   String toString() {
@@ -96,7 +127,12 @@ class SingleGameDeleted extends SingleGameState {
 /// What the system has not yet read the game state.
 ///
 class SingleGameUninitialized extends SingleGameState {
-  SingleGameUninitialized() : super(game: null);
+  SingleGameUninitialized()
+      : super(
+    game: null,
+    loadedCategory: false,
+    words: BuiltList.of([]),
+  );
 }
 
 abstract class SingleGameEvent extends Equatable {}
@@ -139,7 +175,7 @@ class SingleGameUpdateWord extends SingleGameEvent {
 /// Deletes this game from the world.
 ///
 class SingleGameStartRound extends SingleGameEvent {
-  final String category;
+  final GameCategory category;
 
   SingleGameStartRound(this.category);
 
@@ -159,6 +195,16 @@ class SingleGameJoin extends SingleGameEvent {
   List<Object> get props => [playerUid];
 }
 
+///
+/// Loads the category associated with this round.
+///
+class SingleGameLoadCategory extends SingleGameEvent {
+  SingleGameLoadCategory();
+
+  @override
+  List<Object> get props => [];
+}
+
 class _SingleGameNewGame extends SingleGameEvent {
   final Game newGame;
 
@@ -166,6 +212,15 @@ class _SingleGameNewGame extends SingleGameEvent {
 
   @override
   List<Object> get props => [newGame];
+}
+
+class _SingleGameNewWords extends SingleGameEvent {
+  final BuiltList<String> words;
+
+  _SingleGameNewWords({@required this.words});
+
+  @override
+  List<Object> get props => [words];
 }
 
 class _SingleGameDeleted extends SingleGameEvent {
@@ -182,8 +237,13 @@ class SingleGameBloc extends Bloc<SingleGameEvent, SingleGameState> {
   final String gameUid;
   final GameData db;
 
+  static final Random _randomNum = Random.secure();
+
   StreamSubscription<Game> _gameSub;
-  StreamSubscription<BuiltList<Game>> _gameEventSub;
+  StreamSubscription<BuiltList<String>> _wordsSub;
+  final Lock _lock = Lock();
+
+  String lastCategoryUid;
 
   SingleGameBloc({@required this.db, @required this.gameUid}) {
     _gameSub = db.getGame(gameUid: gameUid).listen(_onGameUpdate);
@@ -203,9 +263,19 @@ class SingleGameBloc extends Bloc<SingleGameEvent, SingleGameState> {
   Future<void> close() async {
     _gameSub?.cancel();
     _gameSub = null;
-    _gameEventSub?.cancel();
-    _gameEventSub = null;
+    _wordsSub?.cancel();
+    _wordsSub = null;
     await super.close();
+  }
+
+  bool cleanupCategory() {
+    if (state.game?.round?.currentCategory?.uid != lastCategoryUid) {
+      _wordsSub?.cancel();
+      _wordsSub = null;
+      lastCategoryUid = state.game.round.currentCategory.uid;
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -242,6 +312,13 @@ class SingleGameBloc extends Bloc<SingleGameEvent, SingleGameState> {
         Game game = event.game;
         await db.updateGame(game: game);
         yield SingleGameSaveSuccessful(singleGameState: state);
+        if (cleanupCategory()) {
+          yield SingleGameLoaded(
+            game: state.game,
+            loadedCategory: false,
+            words: BuiltList.of([]),
+          );
+        }
       } catch (e) {
         yield SingleGameSaveFailed(singleGameState: state, error: e);
       }
@@ -256,14 +333,22 @@ class SingleGameBloc extends Bloc<SingleGameEvent, SingleGameState> {
         bAllWords[bAllWords.length - 1] = wordB.build();
 
         // Add in a new word
+        String word;
+        if (state.loadedCategory) {
+          word = state.words[_randomNum.nextInt(state.words.length)];
+        } else {
+          var words = await db
+              .getWordsForCategory(
+              categoryUid: state.game.round.currentCategory.uid)
+              .first;
+          word = words[_randomNum.nextInt(state.words.length)];
+        }
+
         bAllWords.add(
           GameWord(
-            (b) => b
-              ..word =
-                  getRandomWordForCategory(state.game.round.currentCategory),
+                (b) => b..word = word,
           ),
         );
-
         // Update the set, choose a new word from the category.
         Game game = state.game.rebuild((b) => b..round.words = bAllWords);
         await db.updateGame(game: game);
@@ -280,9 +365,20 @@ class SingleGameBloc extends Bloc<SingleGameEvent, SingleGameState> {
         // User has to exist to be in here.
         round.currentPlayerUid =
             (await FirebaseAuth.instance.currentUser()).uid;
-        round.currentCategory = event.category;
-        round.words.add(GameWord((b) => b..word = "Frog"));
+        round.currentCategory = event.category.toBuilder();
         round.completed = false;
+
+        String word;
+        if (lastCategoryUid == event.category.uid && state.loadedCategory) {
+          word = state.words[_randomNum.nextInt(state.words.length)];
+        } else {
+          var words = await db
+              .getWordsForCategory(
+              categoryUid: state.game.round.currentCategory.uid)
+              .first;
+          word = words[_randomNum.nextInt(state.words.length)];
+        }
+        round.words.add(GameWord((b) => b..word = word));
 
         // Update the set, choose a new word from the category.
         await db.updateGame(game: state.game.rebuild((b) => b..round = round));
@@ -301,14 +397,31 @@ class SingleGameBloc extends Bloc<SingleGameEvent, SingleGameState> {
         yield SingleGameSaveFailed(singleGameState: state, error: e);
       }
     }
+
+    if (event is SingleGameLoadCategory) {
+      if (state.game.round != null &&
+          state.game.round.currentCategory != null) {
+        _lock.synchronized(() {
+          _setupWordsSub();
+        });
+      }
+    }
+
+    if (event is _SingleGameNewWords) {
+      yield SingleGameLoaded(
+          game: state.game,
+          state: state,
+          words: event.words,
+          loadedCategory: true);
+    }
   }
 
-  String getRandomWordForCategory(String category) {
-    switch (category) {
-      case "Animal":
-        return "frog";
-      default:
-        return "unknown";
-    }
+  void _setupWordsSub() {
+    _wordsSub?.cancel();
+    _wordsSub = db
+        .getWordsForCategory(categoryUid: state.game.round.currentCategory.uid)
+        .listen((event) {
+      add(_SingleGameNewWords(words: event));
+    });
   }
 }
