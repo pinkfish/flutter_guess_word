@@ -1,15 +1,37 @@
+/*
+ * Copyright (c) 2020 pinkfish
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+ * OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_word_guesser/blocs/authenticationbloc.dart';
 import 'package:intl/intl.dart';
 
 import 'l10n/messages_all.dart';
-import 'package:flutter_word_guesser/blocs/authenticationbloc.dart';
 
 class Messages {
   static Future<Messages> load(Locale locale) async {
     final String name =
-        locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
+    locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
     final String localeName = Intl.canonicalizedLocale(name);
 
     return initializeMessages(localeName).then((_) {
@@ -28,6 +50,7 @@ class Messages {
 
   String get title => Intl.message("Basketball stats",
       desc: "Title of the app", locale: locale, args: []);
+
   String get loading => Intl.message("Loading...",
       desc: "Message to show while loading data", locale: locale, args: []);
 
@@ -106,16 +129,19 @@ class Messages {
 
   String get _markTwainQuote =>
       Intl.message("Lies, Damn Lies and Statistics", locale: locale, args: []);
+
   String get _markTwainName =>
       Intl.message("Mark Twain", locale: locale, args: []);
+
   String get _michaelJoronQuote => Intl.message(
       "I've missed more than 9000 shots in my career. "
-      "I've lost almost 300 games. 26 times, "
-      "I've been trusted to take the game winning shot and missed. "
-      "I've failed over and over and over again in my life. "
-      "And that is why I succeed.",
+          "I've lost almost 300 games. 26 times, "
+          "I've been trusted to take the game winning shot and missed. "
+          "I've failed over and over and over again in my life. "
+          "And that is why I succeed.",
       locale: locale,
       args: []);
+
   String get _michaelJordanName =>
       Intl.message("Michael Jordan", locale: locale, args: []);
 
@@ -123,11 +149,13 @@ class Messages {
       "I know I am getting better at golf because I am hitting fewer spectators.",
       locale: locale,
       args: []);
+
   String get _geraldFordName =>
       Intl.message("Gerald B Ford", locale: locale, args: []);
 
   String get _douglasAdamsQuote =>
       Intl.message("Don't Panic", locale: locale, args: []);
+
   String get _douglasAdminsName =>
       Intl.message("Douglas Adams", locale: locale, args: []);
 

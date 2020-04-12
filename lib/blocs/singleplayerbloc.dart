@@ -1,3 +1,25 @@
+/*
+ * Copyright (c) 2020 pinkfish
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+ * OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
@@ -17,10 +39,9 @@ abstract class SinglePlayerState extends Equatable {
   final bool loadedGames;
   final BuiltList<Game> games;
 
-  SinglePlayerState(
-      {@required this.player,
-      @required this.games,
-      @required this.loadedGames});
+  SinglePlayerState({@required this.player,
+    @required this.games,
+    @required this.loadedGames});
 
   @override
   List<Object> get props => [player, loadedGames, games];
@@ -30,15 +51,14 @@ abstract class SinglePlayerState extends Equatable {
 /// We have a player, default state.
 ///
 class SinglePlayerLoaded extends SinglePlayerState {
-  SinglePlayerLoaded(
-      {@required Player player,
-      SinglePlayerState state,
-      bool loadedGamed,
-      BuiltList<Game> games})
+  SinglePlayerLoaded({@required Player player,
+    SinglePlayerState state,
+    bool loadedGamed,
+    BuiltList<Game> games})
       : super(
-            player: player ?? state.player,
-            loadedGames: loadedGamed ?? state.loadedGames,
-            games: games ?? state.games);
+      player: player ?? state.player,
+      loadedGames: loadedGamed ?? state.loadedGames,
+      games: games ?? state.games);
 
   @override
   String toString() {
@@ -52,9 +72,9 @@ class SinglePlayerLoaded extends SinglePlayerState {
 class SinglePlayerSaving extends SinglePlayerState {
   SinglePlayerSaving({@required SinglePlayerState singlePlayerState})
       : super(
-            player: singlePlayerState.player,
-            loadedGames: singlePlayerState.loadedGames,
-            games: singlePlayerState.games);
+      player: singlePlayerState.player,
+      loadedGames: singlePlayerState.loadedGames,
+      games: singlePlayerState.games);
 
   @override
   String toString() {
@@ -68,9 +88,9 @@ class SinglePlayerSaving extends SinglePlayerState {
 class SinglePlayerSaveSuccessful extends SinglePlayerState {
   SinglePlayerSaveSuccessful({@required SinglePlayerState singlePlayerState})
       : super(
-            player: singlePlayerState.player,
-            loadedGames: singlePlayerState.loadedGames,
-            games: singlePlayerState.games);
+      player: singlePlayerState.player,
+      loadedGames: singlePlayerState.loadedGames,
+      games: singlePlayerState.games);
 
   @override
   String toString() {
@@ -84,12 +104,11 @@ class SinglePlayerSaveSuccessful extends SinglePlayerState {
 class SinglePlayerSaveFailed extends SinglePlayerState {
   final Error error;
 
-  SinglePlayerSaveFailed(
-      {@required SinglePlayerState singlePlayerState, this.error})
+  SinglePlayerSaveFailed({@required SinglePlayerState singlePlayerState, this.error})
       : super(
-            player: singlePlayerState.player,
-            loadedGames: singlePlayerState.loadedGames,
-            games: singlePlayerState.games);
+      player: singlePlayerState.player,
+      loadedGames: singlePlayerState.loadedGames,
+      games: singlePlayerState.games);
 
   @override
   String toString() {

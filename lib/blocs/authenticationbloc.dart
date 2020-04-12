@@ -1,3 +1,25 @@
+/*
+ * Copyright (c) 2020 pinkfish
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+ * OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
@@ -142,8 +164,7 @@ class AuthenticationEventAsGoogleUser extends AuthenticationEvent {
 ///
 /// This bloc deals with all the pieces related to authentication.
 ///
-class AuthenticationBloc
-    extends Bloc<AuthenticationEvent, AuthenticationState> {
+class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
   final FirebaseAnalytics analyticsSubsystem;
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
@@ -188,8 +209,7 @@ class AuthenticationBloc
   // http://localhost:60548/#/Game/n0yoFC9Vgt6taqYvG37j
 
   @override
-  Stream<AuthenticationState> mapEventToState(
-      AuthenticationEvent event) async* {
+  Stream<AuthenticationState> mapEventToState(AuthenticationEvent event) async* {
     if (event is _AuthenticationLogIn) {
       _AuthenticationLogIn loggedInEvent = event;
       var state = _updateWithUser(loggedInEvent.user);
@@ -230,20 +250,20 @@ class AuthenticationBloc
         final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
         if (googleUser != null) {
           final GoogleSignInAuthentication googleAuth =
-              await googleUser.authentication;
+          await googleUser.authentication;
           final AuthCredential credential = GoogleAuthProvider.getCredential(
             accessToken: googleAuth.accessToken,
             idToken: googleAuth.idToken,
           );
           AuthResult result =
-              await FirebaseAuth.instance.signInWithCredential(credential);
+          await FirebaseAuth.instance.signInWithCredential(credential);
           var user = result.user;
           assert(!user.isAnonymous);
           if (user != null) {
             assert(await user.getIdToken() != null);
 
             final FirebaseUser currentUser =
-                await FirebaseAuth.instance.currentUser();
+            await FirebaseAuth.instance.currentUser();
             assert(user.uid == currentUser.uid);
             print("Logged in as $user");
             analyticsSubsystem.logLogin();

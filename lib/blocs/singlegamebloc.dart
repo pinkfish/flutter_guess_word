@@ -1,3 +1,25 @@
+/*
+ * Copyright (c) 2020 pinkfish
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+ * OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 import 'dart:async';
 import 'dart:math';
 
@@ -42,10 +64,10 @@ class SingleGameLoaded extends SingleGameState {
     bool loadedCategory,
     BuiltList<String> words,
   }) : super(
-          game: game ?? state.game,
-          loadedCategory: loadedCategory ?? state.loadedCategory,
-          words: words ?? state.words,
-        );
+    game: game ?? state.game,
+    loadedCategory: loadedCategory ?? state.loadedCategory,
+    words: words ?? state.words,
+  );
 
   @override
   String toString() {
@@ -59,10 +81,10 @@ class SingleGameLoaded extends SingleGameState {
 class SingleGameSaving extends SingleGameState {
   SingleGameSaving({@required SingleGameState singleGameState})
       : super(
-          game: singleGameState.game,
-          loadedCategory: singleGameState.loadedCategory,
-          words: singleGameState.words,
-        );
+    game: singleGameState.game,
+    loadedCategory: singleGameState.loadedCategory,
+    words: singleGameState.words,
+  );
 
   @override
   String toString() {
@@ -76,10 +98,10 @@ class SingleGameSaving extends SingleGameState {
 class SingleGameSaveSuccessful extends SingleGameState {
   SingleGameSaveSuccessful({@required SingleGameState singleGameState})
       : super(
-    game: singleGameState.game,
-    loadedCategory: singleGameState.loadedCategory,
-    words: singleGameState.words,
-  );
+          game: singleGameState.game,
+          loadedCategory: singleGameState.loadedCategory,
+          words: singleGameState.words,
+        );
 
   @override
   String toString() {
