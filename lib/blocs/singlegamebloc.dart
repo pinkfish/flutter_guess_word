@@ -81,10 +81,10 @@ class SingleGameLoaded extends SingleGameState {
 class SingleGameSaving extends SingleGameState {
   SingleGameSaving({@required SingleGameState singleGameState})
       : super(
-    game: singleGameState.game,
-    loadedCategory: singleGameState.loadedCategory,
-    words: singleGameState.words,
-  );
+          game: singleGameState.game,
+          loadedCategory: singleGameState.loadedCategory,
+          words: singleGameState.words,
+        );
 
   @override
   String toString() {

@@ -83,28 +83,20 @@ class MainGameView extends StatelessWidget {
                 Expanded(
                   child: state.games.length == 0
                       ? state.loadedGames
-                      ? Text("Not joined any games",
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .bodyText1)
-                      : Text(Messages
-                      .of(context)
-                      .loading,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .bodyText1)
+                          ? Text("Not joined any games",
+                              style: Theme.of(context).textTheme.bodyText1)
+                          : Text(Messages.of(context).loading,
+                              style: Theme.of(context).textTheme.bodyText1)
                       : AnimatedList(
-                    key: _listKey,
-                    initialItemCount: state.games.length,
-                    itemBuilder: (BuildContext cointext, int index,
-                        Animation<double> animate) =>
-                        GameInfo(
-                          game: state.games[index],
-                          animation: animate,
+                          key: _listKey,
+                          initialItemCount: state.games.length,
+                          itemBuilder: (BuildContext cointext, int index,
+                                  Animation<double> animate) =>
+                              GameInfo(
+                            game: state.games[index],
+                            animation: animate,
+                          ),
                         ),
-                  ),
                 ),
               ],
             ),

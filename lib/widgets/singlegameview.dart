@@ -125,7 +125,7 @@ class SingleGameView extends StatelessWidget {
                             onTap: () => bloc.add(SingleGameStartRound(e)),
                           ),
                         ),
-                  )
+                      )
                       .toList(),
                 );
               }),
