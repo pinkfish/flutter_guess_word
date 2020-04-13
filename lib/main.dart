@@ -82,12 +82,10 @@ class MyApp extends StatelessWidget {
   Route<dynamic> _generateRoute(RouteSettings settings) {
     var bits = settings.name.split("/");
     bits.removeWhere((element) => element.isEmpty);
-    print("In here");
     if (bits.length == 0) {
       return MaterialPageRoute(
           settings: settings, builder: (context) => HomeScreen());
     }
-    print("Fluff $bits");
     switch (bits[0]) {
       case "Game":
         if (bits.length > 1) {

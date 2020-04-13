@@ -301,7 +301,6 @@ class AuthenticationBloc
   }
 
   void _authChanged(FirebaseUser user) async {
-    print("Got user");
     if (user != null) {
       add(_AuthenticationLogIn(user: user));
     } else {

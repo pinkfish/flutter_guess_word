@@ -63,7 +63,6 @@ class GameData {
     if (data.exists) {
       yield Game.fromMap(data.data);
       await for (var d in doc.snapshots()) {
-        print(d.data);
         yield Game.fromMap(d.data);
       }
     } else {
