@@ -63,6 +63,7 @@ class GameData {
     if (data.exists) {
       yield Game.fromMap(data.data);
       await for (var d in doc.snapshots()) {
+        print(d.data);
         yield Game.fromMap(d.data);
       }
     } else {
@@ -75,7 +76,7 @@ class GameData {
 
     var map = game.toMap();
     if (game.round != null && game.round.roundStart == null) {
-      // Set the round start to the serever timestamp.
+      // Set the round start to the server timestamp.
       map["round.roundStart"] = FieldValue.serverTimestamp();
     }
     map["lastUpdated"] = FieldValue.serverTimestamp();
@@ -99,7 +100,6 @@ class GameData {
     var map = g.toMap();
     map["started"] = FieldValue.serverTimestamp();
     map["lastUpdated"] = FieldValue.serverTimestamp();
-    print(map);
 
     await doc.setData(map);
   }
@@ -169,6 +169,13 @@ class GameData {
     return;
   }
 
+  Future<void> updatePlayerName({String playerUid, String name}) async {
+    var doc = Firestore.instance.collection("Player").document(playerUid);
+
+    await doc.updateData({name: name});
+    return;
+  }
+
   Future<void> deletePlayer({String playerUid}) async {
     var doc = Firestore.instance.collection("Player").document(playerUid);
 
@@ -180,7 +187,6 @@ class GameData {
     var docs = Firestore.instance
         .collection("Game")
         .where("players.$playerUid.enabled", isEqualTo: true);
-    print("players.$playerUid.enabled");
     var first = await docs.getDocuments();
     yield BuiltList.of(first.documents.map((e) => Game.fromMap(e.data)));
 
@@ -194,10 +200,8 @@ class GameData {
         .collection("Category")
         .document(categoryUid)
         .collection("Words");
-    print(categoryUid);
     var first = await docs.getDocuments();
     yield BuiltList.of(first.documents.map((e) {
-      print("Big fish ${e.documentID}");
       return e.documentID;
     }));
 

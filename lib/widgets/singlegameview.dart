@@ -122,13 +122,25 @@ class SingleGameView extends StatelessWidget {
                     endTime: g.round.endTime,
                     style: Theme.of(context).textTheme.headline1),
               ),
-              Container(
-                alignment: Alignment.center,
-                child: Text(g.round.words.last.word,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline1
-                        .copyWith(color: Theme.of(context).accentColor)),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 500),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.blue,
+                      width: 10,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.lightBlueAccent.shade100,
+                  ),
+                  child: Text(g.round.words.last.word,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline1
+                          .copyWith(color: Theme.of(context).accentColor)),
+                ),
               ),
             ],
           ),

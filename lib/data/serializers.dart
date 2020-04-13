@@ -62,9 +62,9 @@ class TimestampSerializer implements PrimitiveSerializer<Timestamp> {
   }
 
   @override
-  Iterable serialize(Serializers serializers, Timestamp object,
+  dynamic serialize(Serializers serializers, Timestamp object,
       {FullType specifiedType = FullType.unspecified}) {
-    return <Object>[object.nanoseconds.toString()];
+    return object;
   }
 
   @override

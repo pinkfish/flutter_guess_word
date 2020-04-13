@@ -202,19 +202,18 @@ class AuthenticationBloc
     return null;
   }
 
-  AuthenticationState _updateWithUser(FirebaseUser user) {
+  Future<AuthenticationState> _updateWithUser(FirebaseUser user) async {
     print("Email not woofed ${user.providerId ?? "frog"}");
+    await user.reload();
     return AuthenticationLoggedIn(user: user);
   }
-
-  // http://localhost:60548/#/Game/n0yoFC9Vgt6taqYvG37j
 
   @override
   Stream<AuthenticationState> mapEventToState(
       AuthenticationEvent event) async* {
     if (event is _AuthenticationLogIn) {
       _AuthenticationLogIn loggedInEvent = event;
-      var state = _updateWithUser(loggedInEvent.user);
+      var state = await _updateWithUser(loggedInEvent.user);
       if (state != null) {
         yield state;
       }

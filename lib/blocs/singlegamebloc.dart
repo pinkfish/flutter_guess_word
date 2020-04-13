@@ -363,7 +363,7 @@ class SingleGameBloc extends Bloc<SingleGameEvent, SingleGameState> {
               .getWordsForCategory(
                   categoryUid: state.game.round.currentCategory.uid)
               .first;
-          word = words[_randomNum.nextInt(state.words.length)];
+          word = words[_randomNum.nextInt(words.length)];
         }
 
         bAllWords.add(
@@ -373,9 +373,11 @@ class SingleGameBloc extends Bloc<SingleGameEvent, SingleGameState> {
         );
         // Update the set, choose a new word from the category.
         Game game = state.game.rebuild((b) => b..round.words = bAllWords);
+        print("Updating ${game.toMap()}");
         await db.updateGame(game: game);
         yield SingleGameSaveSuccessful(singleGameState: state);
       } catch (e) {
+        print("Error $e");
         yield SingleGameSaveFailed(singleGameState: state, error: e);
       }
     }
