@@ -61,9 +61,11 @@ class HomeScreen extends StatelessWidget {
                         playerUid: state.user.uid),
                     child: MainGameView(),
                   )
-                : Text(
-                    'Not logged in',
-                  ),
+                : state is AuthenticationUninitialized
+                    ? Text("Checking login")
+                    : Text(
+                        'Not logged in',
+                      ),
           );
         },
       ),

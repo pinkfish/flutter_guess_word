@@ -20,6 +20,8 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +29,6 @@ import 'package:flutter_word_guesser/blocs/categorybloc.dart';
 import 'package:flutter_word_guesser/blocs/singlegamebloc.dart';
 import 'package:flutter_word_guesser/data/game.dart';
 import 'package:flutter_word_guesser/widgets/countdownwidget.dart';
-import 'package:flutter_word_guesser/widgets/playername.dart';
 
 import '../messages.dart';
 import 'categoryitem.dart';
@@ -55,63 +56,77 @@ class SingleGameView extends StatelessWidget {
 
     if (g.round != null && !g.round.completed) {
       if (g.round.endTime.isBefore(DateTime.now())) {
-        bloc.add(
-          SingleGameUpdate(game: g.rebuild((b) => b..round.completed = true)),
-        );
+        bloc.add(SingleGameUpdate(
+            game: g.rebuild((b) => b..round.completed = true)));
       }
       if (g.round.currentPlayerUid == myUid) {
         if (!gameState.loadedCategory) {
           bloc.add(SingleGameLoadCategory());
         }
         // Show a button bar with the skip/yes on it.
-        return Padding(
-          padding: EdgeInsets.all(5),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(height: 20),
-              Text("Guessing word",
-                  style: Theme.of(context).textTheme.headline2),
-              _timerDisplay(context, g),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  RaisedButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+        return RepositoryProvider(
+          create: (BuildContext context) {
+            // Complete the game when the time runs out.
+            print("Diff " +
+                (g.round.endTime.difference(DateTime.now()).abs().inSeconds)
+                    .toString());
+            return Timer(
+              g.round.endTime.difference(DateTime.now()).abs(),
+              () => bloc.add(SingleGameUpdate(
+                  game: g.rebuild((b) => b..round.completed = true))),
+            );
+          },
+          child: Padding(
+            padding: EdgeInsets.all(5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: 20),
+                Text("Guessing word",
+                    style: Theme.of(context).textTheme.headline2),
+                _timerDisplay(context, g),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 5,
+                      hoverElevation: 10,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            left: 20, right: 20, top: 5, bottom: 5),
+                        child: Text("SKIP",
+                            style: Theme.of(context).textTheme.headline4),
+                      ),
+                      color:
+                          Theme.of(context).buttonTheme.colorScheme.background,
+                      onPressed: () => _skipWord(context),
                     ),
-                    elevation: 5,
-                    hoverElevation: 10,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          left: 20, right: 20, top: 5, bottom: 5),
-                      child: Text("SKIP",
-                          style: Theme.of(context).textTheme.headline4),
-                    ),
-                    color: Theme.of(context).buttonTheme.colorScheme.background,
-                    onPressed: () => _skipWord(context),
-                  ),
-                  SizedBox(width: 50),
-                  RaisedButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    elevation: 5,
-                    hoverElevation: 10,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          left: 20, right: 20, top: 5, bottom: 5),
-                      child: Text("YES",
-                          style: Theme.of(context).textTheme.headline4),
-                    ),
-                    color: Theme.of(context).buttonTheme.colorScheme.background,
-                    onPressed: () => _yesWord(context),
-                  )
-                ],
-              ),
-            ],
+                    SizedBox(width: 50),
+                    RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      elevation: 5,
+                      hoverElevation: 10,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            left: 20, right: 20, top: 5, bottom: 5),
+                        child: Text("YES",
+                            style: Theme.of(context).textTheme.headline4),
+                      ),
+                      color:
+                          Theme.of(context).buttonTheme.colorScheme.background,
+                      onPressed: () => _yesWord(context),
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       } else {
@@ -139,21 +154,6 @@ class SingleGameView extends StatelessWidget {
           ),
         );
       }
-    }
-    if (!gameState.game.players.containsKey(myUid)) {
-      return Padding(
-        padding: EdgeInsets.all(5),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _lastRound(context),
-            ButtonBar(
-              children: _getButtons(context),
-            ),
-          ],
-        ),
-      );
     }
 
     return Padding(
@@ -206,23 +206,36 @@ class SingleGameView extends StatelessWidget {
   Widget _wordToGuess(BuildContext context, Game g) {
     return Padding(
       padding: EdgeInsets.all(10),
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 500),
+      child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
           border: Border.all(
-            color: Theme.of(context).accentColor,
+            color: Theme
+                .of(context)
+                .accentColor,
             width: 10,
           ),
           borderRadius: BorderRadius.circular(20),
           color: Colors.lightBlueAccent.shade100,
         ),
         padding: EdgeInsets.only(top: 20, bottom: 20),
-        child: Text(g.round.words.last.word,
-            style: Theme.of(context)
-                .textTheme
-                .headline1
-                .copyWith(color: Colors.black)),
+        child: AnimatedSwitcher(
+          duration: Duration(milliseconds: 500),
+          switchInCurve: Curves.easeInOut,
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return FadeTransition(
+              child: child,
+              opacity: animation,
+            );
+          },
+          child: Text(g.round.words.last.word,
+              key: ValueKey(g.round.words.last.word),
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline1
+                  .copyWith(color: Colors.black)),
+        ),
       ),
     );
   }
@@ -333,7 +346,7 @@ class SingleGameView extends StatelessWidget {
     if (!gameState.game.players.containsKey(myUid)) {
       return <Widget>[
         FlatButton(
-          child: Text("JOIN"),
+          child: Text("REMEMBER"),
           onPressed: () => bloc.add(SingleGameJoin(myUid)),
         )
       ];

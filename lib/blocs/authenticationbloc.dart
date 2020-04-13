@@ -183,6 +183,28 @@ class AuthenticationBloc
   }
 
   AuthenticationBloc({@required this.analyticsSubsystem}) {
+    print("AuthBloc created");
+    _doStartup();
+  }
+
+  void _doStartup() async {
+    // Resign in on login.
+    print("Getting google user");
+    bool signedIn = false;
+    try {
+      var result = await _googleSignIn
+          .signInSilently()
+          .timeout(const Duration(seconds: 1));
+      print("After signin");
+      signedIn = result != null;
+    } catch (e) {
+      print("Error with google signin $e");
+    }
+    if (!signedIn) {
+      print("Anonymous");
+      await FirebaseAuth.instance.signInAnonymously();
+    }
+    print("Getting current user");
     FirebaseAuth.instance
         .currentUser()
         .then((FirebaseUser user) => _authChanged(user));

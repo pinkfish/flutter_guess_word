@@ -51,7 +51,7 @@ abstract class Round implements Built<Round, RoundBuilder> {
   @memoized
   DateTime get endTime {
     if (roundStart == null) {
-      return DateTime.now().add(Duration(seconds: 120));
+      return DateTime.now().add(Duration(seconds: 60));
     }
     return roundStart.toDate().add(roundLength);
   }

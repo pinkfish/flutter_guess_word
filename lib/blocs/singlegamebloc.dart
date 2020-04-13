@@ -30,6 +30,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_word_guesser/data/game.dart';
 import 'package:flutter_word_guesser/data/gamecategory.dart';
+import 'package:flutter_word_guesser/data/gameplayer.dart';
 import 'package:flutter_word_guesser/data/gameword.dart';
 import 'package:flutter_word_guesser/data/round.dart';
 import 'package:flutter_word_guesser/services/gamedata.dart';
@@ -393,19 +394,31 @@ class SingleGameBloc extends Bloc<SingleGameEvent, SingleGameState> {
 
         String word;
         if (lastCategoryUid == event.category.uid && state.loadedCategory) {
-          word = state.words[_randomNum.nextInt(state.words.length)];
+          var words = state.words
+              .where((f) => state.game.round.words.any((e) => e.word == f))
+              .toList();
+          word = words[_randomNum.nextInt(words.length)];
         } else {
-          print(event.category);
-          var words = await db
+          var builtWords = await db
               .getWordsForCategory(categoryUid: event.category.uid)
               .first;
+          var words = builtWords
+              .where((f) => state.game.round.words.any((e) => e.word == f))
+              .toList();
           print(words);
           word = words[_randomNum.nextInt(words.length)];
         }
         round.words.add(GameWord((b) => b..word = word));
 
+        // Add ourselves into the game.
+        var g = state.game.toBuilder();
+        if (!state.game.players.containsKey(round.currentPlayerUid)) {
+          g.players[round.currentPlayerUid] = GamePlayer();
+        }
+        g.round = round;
+
         // Update the set, choose a new word from the category.
-        await db.updateGame(game: state.game.rebuild((b) => b..round = round));
+        await db.updateGame(game: g.build());
         yield SingleGameSaveSuccessful(singleGameState: state);
       } catch (e) {
         print(e);
