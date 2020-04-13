@@ -210,9 +210,7 @@ class SingleGameView extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           border: Border.all(
-            color: Theme
-                .of(context)
-                .accentColor,
+            color: Theme.of(context).accentColor,
             width: 10,
           ),
           borderRadius: BorderRadius.circular(20),
@@ -230,8 +228,7 @@ class SingleGameView extends StatelessWidget {
           },
           child: Text(g.round.words.last.word,
               key: ValueKey(g.round.words.last.word),
-              style: Theme
-                  .of(context)
+              style: Theme.of(context)
                   .textTheme
                   .headline1
                   .copyWith(color: Colors.black)),
