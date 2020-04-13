@@ -203,8 +203,9 @@ class AuthenticationBloc
   }
 
   Future<AuthenticationState> _updateWithUser(FirebaseUser user) async {
-    print("Email not woofed ${user.providerId ?? "frog"}");
-    await user.reload();
+    IdTokenResult token = await user.getIdToken();
+    print(
+        "Email not woofed ${user.providerId ?? "frog"} ${token.token} ${token.signInProvider} []");
     return AuthenticationLoggedIn(user: user);
   }
 
