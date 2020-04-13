@@ -1,12 +1,15 @@
 'use strict';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "favicon.png": "5dcef449791fa27946b3d35ad8803796",
-"manifest.json": "4ef11d63911e726070cf37ea2fd358ca",
-"main.dart.js_1.part.js": "e5a59f0690e04de51248588e468b7edd",
+  "favicon-16x16.png": "5a77a7fd46b82d722726cf8e8adaf1e4",
+"favicon.ico": "3f3156d422e172ce9be45916896514ec",
+"manifest.json": "f4622512655cfd8837f1e6ef2a4ebbfa",
+"main.dart.js_1.part.js": "d39b3730f8ae5b64383853611643f489",
 "main.dart.js_1.part.js.map": "74cd6811304c0cf8e6066afa89802110",
-"icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
-"icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
+"icons/android-chrome-192x192.png": "0f56263a4a36000600bbc49c7d8570fb",
+"icons/android-chrome-512x512.png": "a87e58b97ba9e611b7660ab406907fd0",
+"icons/apple-touch-icon.png": "7e485ca4aadda526731ec60aa4d5dece",
+"icons/favicon-32x32.png": "b79853c7ddad87183f1cb000e25be6aa",
 "assets/AssetManifest.json": "17c2fcb0f84c471fe2c927bed2c859d8",
 "assets/LICENSE": "49e106ceae6b4906fad93a2610f3727e",
 "assets/assets/images/google_logo.png": "b75aecaf9e70a9b1760497e33bcd6db1",
@@ -15,9 +18,9 @@ const RESOURCES = {
 "assets/packages/material_design_icons_flutter/lib/fonts/materialdesignicons-webfont.ttf": "fe1545ef4dd1eef2f1e25528898fc0b3",
 "assets/fonts/MaterialIcons-Regular.ttf": "56d3ffdef7a25659eab6a68a3fbfaf16",
 "assets/FontManifest.json": "0621fb7723859a382fc19210904f6578",
-"main.dart.js": "a08ac6b6e7aceb33a0a49c9e3b139973",
-"index.html": "2d08c50f0b6ed6dd6d16b4cdfef5131b",
-"/": "2d08c50f0b6ed6dd6d16b4cdfef5131b"
+"main.dart.js": "da7169532de1e045b4a0d4ba3c1c2da5",
+"index.html": "0d04e4404a71b6c3f318ed43d4942dca",
+"/": "0d04e4404a71b6c3f318ed43d4942dca"
 };
 
 self.addEventListener('activate', function (event) {
