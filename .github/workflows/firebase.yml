@@ -35,3 +35,10 @@ jobs:
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         FIREBASE_PROJECT: word-guesser-ea20d
+        PROJECT_PATH: firebase
+    - uses: matheusalbino/git-commit@v1.0.1
+      with:
+        user-name: pinkfish
+        user-email: pinkfishfrog@gmail.com
+        message: Publish the firebase hosting from GitHub action
+        github-token: ${{ secrets.GITHUB_TOKEN }}
