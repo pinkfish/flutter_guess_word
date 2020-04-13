@@ -35,7 +35,7 @@ jobs:
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         FIREBASE_PROJECT: word-guesser-ea20d
-        PROJECT_PATH: firebase
+        PROJECT_PATH: ./firebase
     - uses: matheusalbino/git-commit@v1.0.1
       with:
         user-name: pinkfish
