@@ -25,6 +25,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_word_guesser/blocs/categorybloc.dart';
 import 'package:flutter_word_guesser/blocs/singlegamebloc.dart';
+import 'package:flutter_word_guesser/data/game.dart';
 import 'package:flutter_word_guesser/widgets/countdownwidget.dart';
 import 'package:flutter_word_guesser/widgets/playername.dart';
 
@@ -67,24 +68,25 @@ class SingleGameView extends StatelessWidget {
           padding: EdgeInsets.all(5),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               SizedBox(height: 20),
               Text("Guessing word",
                   style: Theme.of(context).textTheme.headline2),
-              Container(
-                alignment: Alignment.center,
-                child: CountdownWidget(
-                    endTime: g.round.endTime,
-                    style: Theme.of(context).textTheme.headline1),
-              ),
+              _timerDisplay(context, g),
               SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    elevation: 5,
+                    hoverElevation: 10,
                     child: Padding(
-                      padding: EdgeInsets.only(left: 20, right: 20),
+                      padding: EdgeInsets.only(
+                          left: 20, right: 20, top: 5, bottom: 5),
                       child: Text("SKIP",
                           style: Theme.of(context).textTheme.headline4),
                     ),
@@ -93,8 +95,14 @@ class SingleGameView extends StatelessWidget {
                   ),
                   SizedBox(width: 50),
                   RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    elevation: 5,
+                    hoverElevation: 10,
                     child: Padding(
-                      padding: EdgeInsets.only(left: 20, right: 20),
+                      padding: EdgeInsets.only(
+                          left: 20, right: 20, top: 5, bottom: 5),
                       child: Text("YES",
                           style: Theme.of(context).textTheme.headline4),
                     ),
@@ -112,36 +120,21 @@ class SingleGameView extends StatelessWidget {
           padding: EdgeInsets.all(5),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text("Word to guess",
-                  style: Theme.of(context).textTheme.headline2),
-              Container(
-                alignment: Alignment.center,
-                child: CountdownWidget(
-                    endTime: g.round.endTime,
-                    style: Theme.of(context).textTheme.headline1),
-              ),
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 500),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.blue,
-                      width: 10,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.lightBlueAccent.shade100,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Word to guess",
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context).textTheme.headline2,
                   ),
-                  child: Text(g.round.words.last.word,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1
-                          .copyWith(color: Theme.of(context).accentColor)),
-                ),
+                ],
               ),
+              _wordToGuess(context, g),
+              SizedBox(height: 20),
+              _timerDisplay(context, g),
             ],
           ),
         );
@@ -206,6 +199,54 @@ class SingleGameView extends StatelessWidget {
                 }),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _wordToGuess(BuildContext context, Game g) {
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 500),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Theme.of(context).accentColor,
+            width: 10,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.lightBlueAccent.shade100,
+        ),
+        padding: EdgeInsets.only(top: 20, bottom: 20),
+        child: Text(g.round.words.last.word,
+            style: Theme.of(context)
+                .textTheme
+                .headline1
+                .copyWith(color: Colors.black)),
+      ),
+    );
+  }
+
+  Widget _timerDisplay(BuildContext context, Game g) {
+    return SizedBox(
+      width: 200,
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Colors.lightGreenAccent.shade100,
+          borderRadius: BorderRadius.circular(50),
+          border: Border.all(
+            color: Colors.green,
+            width: 2,
+          ),
+        ),
+        child: CountdownWidget(
+            endTime: g.round.endTime,
+            styleLower: Theme.of(context)
+                .textTheme
+                .headline1
+                .copyWith(color: Colors.red),
+            style: Theme.of(context).textTheme.headline1),
       ),
     );
   }

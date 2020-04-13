@@ -27,8 +27,9 @@ import 'package:flutter/material.dart';
 class CountdownWidget extends StatefulWidget {
   final DateTime endTime;
   final TextStyle style;
+  final TextStyle styleLower;
 
-  CountdownWidget({this.endTime, this.style});
+  CountdownWidget({this.endTime, this.style, this.styleLower});
 
   @override
   State<CountdownWidget> createState() {
@@ -68,6 +69,30 @@ class _CountdownWidgetState extends State<CountdownWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(_duration.inSeconds.toString(), style: widget.style);
+    Widget inner;
+    if (_duration.inSeconds < 10) {
+      inner = Text(
+        _duration.inSeconds.toString(),
+        style: widget.styleLower,
+        key: ValueKey(_duration.inMilliseconds),
+      );
+    } else {
+      inner = Text(
+        _duration.inSeconds.toString(),
+        style: widget.style,
+        key: ValueKey(_duration.inMilliseconds),
+      );
+    }
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 500),
+      switchInCurve: Curves.easeInOut,
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return FadeTransition(
+          child: child,
+          opacity: animation,
+        );
+      },
+      child: inner,
+    );
   }
 }

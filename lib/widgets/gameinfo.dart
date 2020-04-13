@@ -44,7 +44,7 @@ class GameInfo extends StatelessWidget {
               arguments: game.uid),
           title: Text(game.title),
           subtitle: Text(
-            "Last updated ${game.lastUpdated.toDate()}, ${game.players.length} players ",
+            "Last updated ${game.lastUpdated?.toDate() ?? "Not Updated"}, ${game.players.length} players ",
           ),
         ),
         padding: EdgeInsets.all(5.0),
