@@ -195,7 +195,7 @@ class AuthenticationBloc
       var result = await _googleSignIn
           .signInSilently()
           .timeout(const Duration(seconds: 1));
-      print("After signin");
+      print("After signin $result");
       signedIn = result != null;
     } catch (e) {
       print("Error with google signin $e");

@@ -3,7 +3,7 @@
   "engine": "v2",
   "file": "main.dart.js_1.part.js",
   "sourceRoot": "",
-  "sources": ["../../../lib/l10n/messages_messages.dart","/opt/hostedtoolcache/flutter/1.15.17-beta/x64/.pub-cache/hosted/pub.dartlang.org/intl-0.16.1/lib/message_lookup_by_library.dart"],
+  "sources": ["../../../lib/l10n/messages_messages.dart","../../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.16.1/lib/message_lookup_by_library.dart"],
   "names": ["MessageLookup._notInlinedMessages","MessageLookupByLibrary.simpleMessage","MessageLookup.localeName","MessageLookupByLibrary.simpleMessage.<anonymous function>","messages","MessageLookup",""],
   "mappings": "A;;IA6CSA,YAA0BA;OAAkBA,cACbA,gBAELA,sBACYA,oCACCA,6BACTA,mBACDA,cAC4BA,UAG/BA,gBACKA,8BACQA,wBAEbA,UAGAA,yBAGAA,yBAC8BA,qBAEpBA,qCAEVA,qCACUA,oCAEVA,yBAEAA,eACIA,uBACGA,uBACHA,qBACCA,4BACMA,+BACHA,2BACDA,yBACnCA,C;kBCoDDC;GADqBA,YACrBA,kBAAsBA,C;;;;;;;;;;;;;;;;;;;;;;;;;;;;;KD/FfC,WAAcA,gBAAUA,C;;;GC+F/BC,WAAMA,aAAgBA,C;;;;;;;;;gBDpGtBC,kBAIAA,SAGaC,MAAoBA,SAPjCD,C",
   "x_org_dartlang_dart2js": {
