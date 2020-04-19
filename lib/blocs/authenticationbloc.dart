@@ -225,6 +225,8 @@ class AuthenticationBloc
   }
 
   Future<AuthenticationState> _updateWithUser(FirebaseUser user) async {
+    // force it to reload.
+    await user.reload();
     if (!user.isAnonymous) {
       IdTokenResult token = await user.getIdToken();
       print(
