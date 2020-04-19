@@ -18,8 +18,8 @@ const RESOURCES = {
 "assets/fonts/MaterialIcons-Regular.ttf": "56d3ffdef7a25659eab6a68a3fbfaf16",
 "assets/AssetManifest.json": "17c2fcb0f84c471fe2c927bed2c859d8",
 "assets/LICENSE": "49e106ceae6b4906fad93a2610f3727e",
-"main.dart.js_1.part.js": "d39b3730f8ae5b64383853611643f489",
-"main.dart.js": "0a19bf22cbc25df1597b9b343d98864c",
+"main.dart.js_1.part.js": "dbaa6f1692098793c68a1d1d55b0dd24",
+"main.dart.js": "ddf22ea03543af5f21e20b5bf560e1b5",
 "manifest.json": "f4622512655cfd8837f1e6ef2a4ebbfa"
 };
 
